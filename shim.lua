@@ -146,7 +146,13 @@ function dump(v, indent)
     elseif t == 'string' then
         return "'" .. v .. "'"
     elseif t == 'table' then
-        return dumpTable(v, indent)
+        if _.isArray(v) then
+            return '[' .. table.concat(_.map(v, function(x)
+                return dump(x)
+            end) , ', ') .. ']'
+        else
+            return dumpTable(v, indent)
+        end
     elseif t == 'nil' then
         return 'null'
     end

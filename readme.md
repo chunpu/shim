@@ -13,12 +13,47 @@ Usage
 local _ = require 'shim'
 
 _.isArray({1, 2, 3}) -- => true
+_.isEqual({a = 1, b = 2}, {a = 1, b = 2}) -- => true
+```
 
-_({1, 2, 3}):chain():map(function(x)
-    return x * 2
-end):filter(function(x)
-    return x > 3
-end):value() -- => {4, 6}
+basic wrapper for oo style
+
+```lua
+_({1, 2, 3}):map(function(x) return x * 2 end)
+-- => {2, 4, 6}
+```
+
+chain support
+
+```lua
+_({1, 0, 2, 4})
+    :chain()
+    :sort()
+    :map(function(x) return x * 2 end)
+    :filter(function(x) return x < 6 end)
+    :value()
+-- => {0, 2, 4}
+```
+
+pretty print
+
+```lua
+print(_.dump({
+    a = 1,
+    b = {
+        a = 1,
+        b = {2, 3, 4}
+    }
+}))
+-- [[ =>
+{
+    'b': {
+        'b': [2, 3, 4],
+        'a': 1
+    },
+    'a': 1
+}
+]]
 ```
 
 Api

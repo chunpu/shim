@@ -1,4 +1,4 @@
-local _ = require 'util'
+local _ = require 'shim'
 
 -- isEqual
 local o = {a = 1}
@@ -57,11 +57,23 @@ local arr = _({1, 2, 3}):map(function(x)
 end)
 assert(_.isEqual(arr, {2, 4, 6}))
 
-local arr = _({1, 2, 3}):chain():map(function(x)
-    return x * 2
-end):filter(function(x)
-    return x > 3
-end):value()
-assert(_.isEqual(arr, {4, 6}))
+
+-- chain
+local arr = _({1, 0, 2, 4})
+    :chain()
+    :sort()
+    :map(function(x) return x * 2 end)
+    :filter(function(x) return x < 6 end)
+    :value()
+assert(_.isEqual(arr, {0, 2, 4}))
+
+
+print(_.dump({
+    a = 1,
+    b = {
+        a = 1,
+        b = {2, 3, 4}
+    }
+}))
 
 print("all tests ok!")
