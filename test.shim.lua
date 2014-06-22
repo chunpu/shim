@@ -67,7 +67,7 @@ local arr = _({1, 0, 2, 4})
     :value()
 assert(_.isEqual(arr, {0, 2, 4}))
 
-
+--[[
 print(_.dump({
     a = 1,
     b = {
@@ -75,5 +75,5 @@ print(_.dump({
         b = {2, 3, 4}
     }
 }))
-
+]]
 print("all tests ok!")
