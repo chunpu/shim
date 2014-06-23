@@ -79,6 +79,22 @@ local i, j = _.lastIndexOf('qweqwe', 'we')
 assert(i == 5)
 assert(j == 6)
 
+-- trim
+assert(
+    _.trim('  qq  ') == 'qq'
+)
+assert(
+    _.trim('   ') == ''
+)
+assert(
+    _.trim('') == ''
+)
+assert(
+    _.trim('  qq  ', 'right') == '  qq'
+)
+assert(
+    _.trim('  qq  ', 'left') == 'qq  '
+)
 
 -- wrapper
 local arr = _({1, 2, 3}):map(function(x)

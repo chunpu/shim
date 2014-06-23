@@ -67,6 +67,26 @@ function _.sub(s, i, j)
     return string.sub(s, i, j)
 end
 
+function _.trim(s, where)
+    local i = 1
+    local j = #s
+    if where ~= 'left' then
+        -- match right space
+        local a, b = _.lastIndexOf(s, '%s+')
+        if b == j then
+            j = a - 1
+        end
+    end
+    if where ~= 'right' then
+        -- match left space
+        local a, b = _.indexOf(s, '%s+')
+        if a == 1 then
+            i = b + 1
+        end
+    end
+    return _.sub(s, i, j)
+end
+
 function _.extend(dst, ...)
     local src = {...}
     _.each(src, function(obj)
