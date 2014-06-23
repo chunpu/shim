@@ -87,6 +87,38 @@ function _.trim(s, where)
     return _.sub(s, i, j)
 end
 
+function _.flatten(arr)
+    local ret = {}
+    for i = 1, #arr do
+        if type(arr[i]) == 'table' then
+            local val = _.flatten(arr[i])
+            for j = 1, #val do
+                table.insert(ret, val[j])
+            end
+        else
+            table.insert(ret, arr[i])
+        end
+    end
+    return ret
+end
+
+function _.uniq(arr)
+    -- use hash so not sorted
+    local hash = {}
+    local ret = {}
+    for i = 1, #arr do
+        hash[arr[i]] = true
+    end
+    for k, v in pairs(hash) do
+        table.insert(ret, k)
+    end
+    return ret
+end
+
+function _.union(...)
+    return _.uniq(_.flatten({...}))
+end
+
 function _.extend(dst, ...)
     local src = {...}
     _.each(src, function(obj)
@@ -142,10 +174,6 @@ function _.lastIndexOf(arr, val, from, isPlain)
             i = i - 1
         end
     end
-end
-
-function trimLeftIndex(s)
-    
 end
 
 function call(_, val)

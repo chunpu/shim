@@ -96,6 +96,32 @@ assert(
     _.trim('  qq  ', 'left') == 'qq  '
 )
 
+-- flatten
+assert(
+    _.isEqual(
+        _.flatten({1, {2, {3, {4}}}}),
+        {1, 2, 3, 4}
+    )
+)
+
+-- uniq
+assert(
+    _.isEqual(
+        _.uniq({1, 2, 3, 2, 1}),
+        {1, 2, 3}
+    )
+)
+
+-- union
+assert(
+    _.isEqual(
+        _.sort(_.union({1, 2, 3}, {5, 2, 1, 4}, {2, 1})),
+        {1, 2, 3, 4, 5}
+    )
+)
+
+
+
 -- wrapper
 local arr = _({1, 2, 3}):map(function(x)
     return x * 2
