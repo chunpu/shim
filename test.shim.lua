@@ -65,6 +65,21 @@ local i, j = _.indexOf('qwerty', 'we')
 assert(i == 2)
 assert(j == 3)
 
+-- lastIndexOf
+assert(
+    _.lastIndexOf({11, 22, 33, 11}, 11) == 4
+)
+assert(
+    _.lastIndexOf({11, 22, 33, 11}, 0) == nil
+)
+assert(
+    _.lastIndexOf({11, 22, 33}, 11) == 1
+)
+local i, j = _.lastIndexOf('qweqwe', 'we')
+assert(i == 5)
+assert(j == 6)
+
+
 -- wrapper
 local arr = _({1, 2, 3}):map(function(x)
     return x * 2

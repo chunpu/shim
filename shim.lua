@@ -63,6 +63,10 @@ function _.has(list, item)
     return false
 end
 
+function _.sub(s, i, j)
+    return string.sub(s, i, j)
+end
+
 function _.extend(dst, ...)
     local src = {...}
     _.each(src, function(obj)
@@ -102,6 +106,26 @@ function _.indexOf(arr, val, from, isPlain)
             end
         end
     end
+end
+
+function _.lastIndexOf(arr, val, from, isPlain)
+    local tp = type(arr)
+    if tp == 'string' then
+        return string.find(arr, val .. '$', from, isPlain)
+    end
+    if tp == 'table' then
+        local i = #arr
+        while i ~= 0 do
+            if arr[i] == val then
+                return i
+            end
+            i = i - 1
+        end
+    end
+end
+
+function trimLeftIndex(s)
+    
 end
 
 function call(_, val)
