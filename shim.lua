@@ -90,6 +90,20 @@ function _.filter(arr, fn)
     return ret
 end
 
+function _.indexOf(arr, val, from, isPlain)
+    local tp = type(arr)
+    if tp == 'string' then
+        return string.find(arr, val, from, isPlain)
+    end
+    if tp == 'table' then
+        for i = from or 1, #arr do
+            if arr[i] == val then
+                return i
+            end
+        end
+    end
+end
+
 function call(_, val)
     local ret = {
         wrap = val

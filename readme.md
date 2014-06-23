@@ -66,4 +66,5 @@ License
 ---
 
 Shim.lua is under MIT
+
 Copyright (c) 2012-2014 [Chunpu](https://github.com/chunpu)

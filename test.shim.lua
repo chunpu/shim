@@ -51,6 +51,20 @@ assert(_.isEqual(_.filter({1, 2, 3, 4, 5}, function(x)
     return x > 3
 end), {4, 5}))
 
+-- indexOf
+assert(
+    _.indexOf({11, 22, 33}, 22) == 2
+)
+assert(
+    _.indexOf({11, 22, 33}, 44) == nil
+)
+assert(
+    _.indexOf({11, 22, 33, 33, 22, 11}, 22, 3) == 5
+)
+local i, j = _.indexOf('qwerty', 'we')
+assert(i == 2)
+assert(j == 3)
+
 -- wrapper
 local arr = _({1, 2, 3}):map(function(x)
     return x * 2
