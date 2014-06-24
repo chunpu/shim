@@ -176,6 +176,25 @@ function _.lastIndexOf(arr, val, from, isPlain)
     end
 end
 
+function _.assertEqual(actual, expect, level)
+    level = level or 2
+    if not _.isEqual(actual, expect) then
+        local msg = 'AssertionError: ' .. _.dump(actual) .. ' == ' .. _.dump(expect)
+        error(msg, level)
+    end
+end
+
+function _.ok(...)
+    local arr = {...}
+    _.each(arr, function(x)
+        if type(x) == 'table' then
+            _.assertEqual(x[1], x[2], 5)
+        else
+            _.assertEqual(x, true, 5)
+        end
+    end)
+end
+
 function call(_, val)
     local ret = {
         wrap = val
