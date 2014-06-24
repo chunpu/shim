@@ -102,6 +102,14 @@ function _.flatten(arr)
     return ret
 end
 
+function _.push(arr, ...)
+    local len = #arr
+    _.each({...}, function(x, i)
+        arr[len + i] = x
+    end)
+    return arr
+end
+
 function _.uniq(arr)
     -- use hash so not sorted
     local hash = {}
