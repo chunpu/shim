@@ -137,6 +137,22 @@ assert(
     }
 )
 
+-- difference
+assert(
+    {
+        _.difference({1, 2, 3, 4, 5}, {5, 2, 10}),
+        {1, 3, 4}
+    }
+)
+
+-- without
+assert(
+    {
+        _.without({1, 4, 3, nil, 0, ''}, nil, 0, ''),
+        {1, 4, 3}
+    }
+)
+
 -- wrapper
 local arr = _({1, 2, 3}):map(function(x)
     return x * 2

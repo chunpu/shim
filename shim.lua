@@ -199,6 +199,20 @@ function _.split(str, sep)
     return ret
 end
 
+function _.difference(arr, other)
+    local ret = {}
+    for i = 1, #arr do
+        if not _.has(other, arr[i]) then
+            table.insert(ret, arr[i])
+        end
+    end
+    return ret
+end
+
+function _.without(arr, ...)
+    return _.difference(arr, {...})
+end
+
 function _.assertEqual(actual, expect, level)
     level = level or 2
     if not _.isEqual(actual, expect) then
