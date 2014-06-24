@@ -118,6 +118,25 @@ assert(
     }
 )
 
+-- split
+assert(
+    {
+        _.split('q,w,e,r', ','),
+        {'q', 'w', 'e', 'r'}
+    }
+    , {
+        _.split('qwer as', ''),
+        {'q', 'w', 'e', 'r', ' ', 'a', 's'}
+    }
+    , {
+        _.split('qwer', 'zz'),
+        {'qwer'}
+    }, {
+        _.split('qq@ww@ee', '@'),
+        {'qq', 'ww', 'ee'}
+    }
+)
+
 -- wrapper
 local arr = _({1, 2, 3}):map(function(x)
     return x * 2
@@ -143,4 +162,4 @@ print(_.dump({
     }
 }))
 ]]
-print("all tests ok!")
+print('all tests ok!')

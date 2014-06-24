@@ -176,6 +176,29 @@ function _.lastIndexOf(arr, val, from, isPlain)
     end
 end
 
+function _.split(str, sep)
+    local from = 1
+    local ret = {}
+    local len = #str
+    while true do
+        local i, j = str:find(sep, from)
+        if i then
+            if i > len then break end
+            if j < i then
+                -- sep == ''
+                j = i
+                i = i + 1
+            end
+            table.insert(ret, str:sub(from, i - 1))
+            from = j + 1
+        else
+            table.insert(ret, str:sub(from, len))
+            break
+        end
+    end
+    return ret
+end
+
 function _.assertEqual(actual, expect, level)
     level = level or 2
     if not _.isEqual(actual, expect) then
