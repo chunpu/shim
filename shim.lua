@@ -15,17 +15,19 @@ function _.isArray(t)
 end
 
 function _.each(arr, fn)
-    for i = 1, #arr do
-        fn(arr[i], i, arr)
+    if arr then
+        for i = 1, #arr do
+            fn(arr[i], i, arr)
+        end
+        return arr
     end
-    return arr
 end
 
 function _.map(arr, fn)
     local ret = {}
-    for i = 1, #arr do
-        ret[i] = fn(arr[i], i, arr)
-    end
+    _.each(arr, function(x, i, arr)
+        ret[i] = fn(x, i, arr)
+    end)
     return ret
 end
 
@@ -64,10 +66,13 @@ function _.has(list, item)
 end
 
 function _.sub(s, i, j)
-    return string.sub(s, i, j)
+    if type(s) == 'string' then
+        return string.sub(s, i, j)
+    end
 end
 
 function _.trim(s, where)
+    if type(s) ~= 'string' then return end
     local i = 1
     local j = #s
     if where ~= 'left' then
@@ -89,16 +94,16 @@ end
 
 function _.flatten(arr)
     local ret = {}
-    for i = 1, #arr do
-        if type(arr[i]) == 'table' then
-            local val = _.flatten(arr[i])
-            for j = 1, #val do
-                table.insert(ret, val[j])
-            end
+    _.each(arr, function(x)
+        if type(x) == 'table' then
+            local val = _.flatten(x)
+            _.each(val, function(x)
+                table.insert(ret, x)
+            end)
         else
-            table.insert(ret, arr[i])
+            table.insert(ret, x)
         end
-    end
+    end)
     return ret
 end
 
@@ -114,9 +119,9 @@ function _.uniq(arr)
     -- use hash so not sorted
     local hash = {}
     local ret = {}
-    for i = 1, #arr do
-        hash[arr[i]] = true
-    end
+    _.each(arr, function(x)
+        hash[x] = true
+    end)
     for k, v in pairs(hash) do
         table.insert(ret, k)
     end
@@ -185,6 +190,7 @@ function _.lastIndexOf(arr, val, from, isPlain)
 end
 
 function _.split(str, sep)
+    if type(str) ~= 'string' then return end
     local from = 1
     local ret = {}
     local len = #str
@@ -209,11 +215,11 @@ end
 
 function _.difference(arr, other)
     local ret = {}
-    for i = 1, #arr do
-        if not _.has(other, arr[i]) then
-            table.insert(ret, arr[i])
+    _.each(arr, function(x)
+        if not _.has(other, x) then
+            table.insert(ret, x)
         end
-    end
+    end)
     return ret
 end
 

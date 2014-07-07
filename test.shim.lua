@@ -92,6 +92,7 @@ assert(
     , _.trim('') == ''
     , _.trim('  qq  ', 'right') == '  qq'
     , _.trim('  qq  ', 'left') == 'qq  '
+    , _.trim(nil) == nil
 )
 
 -- flatten
@@ -134,6 +135,9 @@ assert(
     }, {
         _.split('qq@ww@ee', '@'),
         {'qq', 'ww', 'ee'}
+    }, {
+        _.split(nil, ''),
+        nil
     }
 )
 
@@ -158,6 +162,18 @@ assert(
     {
         _.push({1, 2, 3}, 4, 5),
         {1, 2, 3, 4, 5}
+    }
+)
+
+-- sub
+assert(
+    {
+        _.sub('qwer', 2, 3),
+        'we'
+    },
+    {
+        _.sub(nil, 2, 3),
+        nil
     }
 )
 
