@@ -15,12 +15,13 @@ function _.isArray(t)
 end
 
 function _.each(arr, fn)
-    if arr then
+    local tp = type(arr)
+    if tp == 'string' or tp == 'table' then
         for i = 1, #arr do
             fn(arr[i], i, arr)
         end
-        return arr
     end
+    return arr
 end
 
 function _.map(arr, fn)
