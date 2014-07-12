@@ -5,7 +5,7 @@ function _.isArray(t)
         local i = 0
         for _ in pairs(t) do
             i = i + 1
-            if (t[i] == nil) then
+            if t[i] == nil then
                 return false
             end
         end
@@ -278,6 +278,8 @@ function call(_, val)
     return ret
 end
 
+local dump, dumpTable -- fix old luajit
+
 function dumpTable(o, lastIndent)
     if type(lastIndent) ~= 'string' then
         lastIndent = ''
@@ -305,7 +307,7 @@ function dump(v, indent)
     elseif t == 'table' then
         if _.isArray(v) then
             return '[' .. table.concat(_.map(v, function(x)
-                return dump(x)
+                return dump(x, indent)
             end) , ', ') .. ']'
         else
             return dumpTable(v, indent)
