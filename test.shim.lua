@@ -20,6 +20,15 @@ assert(
     , _.isArray({[1] = 2, [2] = 3})
     , not _.isArray({[1] = 2, [2] = 3, [4] = 5})
     , _.isArray({})
+    , _.isArray({
+        {1, 2},
+        {a = 2},
+        3,
+        {1, 2},
+        {a = {
+            a = 2
+        }}
+    })
 )
 
 -- each
@@ -35,6 +44,38 @@ assert(_.each(str, function(x)
     i = i + 1
     assert(x == str[i])
 end) == str)
+
+-- _each
+local arr = {}
+_._each({1, 2, 3, 4}, function(x)
+    if x > 2 then return false end
+    table.insert(arr, x)
+end)
+assert(
+    {arr, {1, 2}}
+)
+
+-- some
+local flag = _.some({1, 2, 3}, function(x)
+    return x > 2
+end)
+assert(flag)
+
+local flag = _.some({1, 2, 3}, function(x)
+    return x > 4
+end)
+assert(not flag)
+
+-- every
+local flag = _.every({1, 2, 3}, function(x)
+    return x > 0
+end)
+assert(flag)
+
+local flag = _.every({1, 2, 3}, function(x)
+    return x > 2
+end)
+assert(not flag)
 
 -- map
 local arr = {1, 0, 2, 4}

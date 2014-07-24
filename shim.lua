@@ -17,11 +17,48 @@ end
 function _.each(arr, fn)
     local tp = type(arr)
     if tp == 'string' or tp == 'table' then
-        for i = 1, #arr do
+        local len = #arr
+        for i = 1, len do
             fn(arr[i], i, arr)
         end
     end
     return arr
+end
+
+function _._each(arr, fn)
+    -- break loop when return false
+    local tp = type(arr)
+    if tp == 'string' or tp == 'table' then
+        local len = #arr
+        for i = 1, len do
+            if fn(arr[i], i, arr) == false then
+                break
+            end
+        end
+    end
+    return arr
+end
+
+function _.every(arr, fn)
+    local flag = true
+    _._each(arr, function(...)
+        if not fn(...) then
+            flag = false
+            return false  
+        end
+    end)
+    return flag
+end
+
+function _.some(arr, fn)
+    local flag = false
+    _._each(arr, function(...)
+        if fn(...) then
+            flag = true
+            return false
+        end
+    end)
+    return flag
 end
 
 function _.map(arr, fn)
