@@ -188,6 +188,15 @@ assert(
     }
 )
 
+-- empty
+assert(_.empty(false))
+assert(not _.empty(true))
+assert(_.empty({}))
+assert(_.empty(0))
+assert(not _.empty('0'))
+assert(not _.empty(1))
+assert(_.empty(''))
+
 -- difference
 assert(
     {

@@ -251,6 +251,18 @@ function _.split(str, sep)
     return ret
 end
 
+function _.empty(x)
+    if not x then return true end
+    local tp = type(x)
+    if tp == 'string' or tp == 'table' then
+        return #x == 0
+    end
+    if x == 0 then
+        return true
+    end
+    return false
+end
+
 function _.difference(arr, other)
     local ret = {}
     _.each(arr, function(x)
