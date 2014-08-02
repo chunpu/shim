@@ -1,6 +1,6 @@
 language: erlang
 
 install:
-    - sudo apt-get install luajit
+    - sudo apt-get install lua5.1
 
-script: luajit test.shim.lua
+script: lua test.shim.lua
