@@ -1,6 +1,8 @@
 Shim.lua
 ===
 
+[![build status][travis-image]][travis-url]
+
 A clean utility library, support for basic and useful function, make it easy to write lua code neatly
 
 `Shim.lua` was deeply inspired by [Underscore.js](https://github.com/jashkenas/underscore), [Lodash.js](https://github.com/lodash/lodash), [Moses](https://github.com/Yonaba/Moses)
@@ -74,3 +76,6 @@ License
 Shim.lua is under MIT
 
 Copyright (c) 2012-2014 [Chunpu](https://github.com/chunpu)
+
+[travis-image]: https://img.shields.io/travis/chunpu/Shim.svg?style=flat
+[travis-url]: https://travis-ci.org/chunpu/Shim
