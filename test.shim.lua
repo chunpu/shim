@@ -233,6 +233,49 @@ assert(
     }
 )
 
+-- reduce
+assert(
+    {
+        _.reduce({}, function() end),
+        nil
+    },
+    {
+        _.reduce({}, function() end, 2),
+        2
+    },
+    {
+        _.reduce({1, 2, 3, 4}, function(ret, k)
+            return ret + k
+        end, 0),
+        10
+    }
+)
+
+-- only
+assert(
+    {
+        _.only({
+            a = 1,
+            b = 2,
+            c = 3
+        }, {'a', 'b'}),
+        {a = 1, b = 2}
+    },
+    {
+        _.only({
+            a = 1,
+            b = 2,
+            c = 3,
+            d = 4
+        }, 'a c     d'),
+        {
+            a = 1,
+            c = 3,
+            d = 4
+        }
+    }
+)
+
 -- wrapper
 local arr = _({1, 2, 3}):map(function(x)
     return x * 2

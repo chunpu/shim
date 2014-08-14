@@ -277,6 +277,26 @@ function _.without(arr, ...)
     return _.difference(arr, {...})
 end
 
+function _.reduce(arr, fn, prev)
+    _.each(arr, function(x, i)
+        prev = fn(prev, x, i, arr)
+    end)
+    return prev
+end
+
+function _.only(obj, keys)
+    obj = obj or {}
+    if type(keys) == 'string' then
+        keys = _.split(keys, ' +')
+    end
+    return _.reduce(keys, function(ret, key)
+        if nil ~= obj[key] then
+            ret[key] = obj[key]
+        end
+        return ret
+    end, {})
+end
+
 function _.assertEqual(actual, expect, level)
     level = level or 2
     if not _.isEqual(actual, expect) then
@@ -367,7 +387,7 @@ function dump(v, indent)
     return '[' .. t .. ']'
 end
 
--- TODO split, reduce, ... other function
+-- TODO other function
 
 _.dump = dump
 
