@@ -276,6 +276,22 @@ assert(
     }
 )
 
+-- invoke
+assert(
+    {
+        _.invoke({'1', '2', '3'}, tonumber),
+        {1, 2, 3}
+    },
+    {
+        _.invoke({1, 2, 3}),
+        {nil, nil, nil}
+    },
+    {
+        _.invoke({{3, 2, 1}, {4, 6, 5}}, _.sort),
+        {{1, 2, 3}, {4, 5, 6}}
+    }
+)
+
 -- wrapper
 local arr = _({1, 2, 3}):map(function(x)
     return x * 2

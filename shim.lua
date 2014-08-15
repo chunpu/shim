@@ -297,6 +297,14 @@ function _.only(obj, keys)
     end, {})
 end
 
+function _.invoke(arr, fn)
+    return _.map(arr, function(x)
+        if type(fn) == 'function' then
+            return fn(x)
+        end
+    end)
+end
+
 function _.assertEqual(actual, expect, level)
     level = level or 2
     if not _.isEqual(actual, expect) then
