@@ -355,7 +355,7 @@ function call(_, val)
     return ret
 end
 
-local dump, dumpTable -- fix old luajit
+local dump, dumpTable
 
 function dumpTable(o, lastIndent)
     if type(lastIndent) ~= 'string' then

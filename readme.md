@@ -5,6 +5,8 @@ Shim.lua
 
 A clean utility library, support for basic and useful function, make it easy to write lua code neatly
 
+[document](http://chunpu.github.io/shim-doc/)
+
 `Shim.lua` was deeply inspired by [Underscore.js](https://github.com/jashkenas/underscore), [Lodash.js](https://github.com/lodash/lodash), [Moses](https://github.com/Yonaba/Moses)
 
 Install
@@ -67,7 +69,7 @@ print(_.dump({
 Api
 ---
 
-TODO %>_<%
+<http://chunpu.github.io/shim-doc/>
 
 
 License
