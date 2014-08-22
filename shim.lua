@@ -251,6 +251,10 @@ function _.split(str, sep)
     return ret
 end
 
+function _.join(arr, sep)
+    return table.concat(arr, sep)
+end
+
 function _.empty(x)
     if not x then return true end
     local tp = type(x)

@@ -188,6 +188,12 @@ assert(
     }
 )
 
+-- join
+assert({
+    _.join({1, 2, 3}, '-'),
+    '1-2-3'
+})
+
 -- empty
 assert(_.empty(false))
 assert(not _.empty(true))
