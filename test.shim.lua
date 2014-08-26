@@ -38,12 +38,6 @@ assert(_.each(arr, function(x)
     i = i + 1
     assert(x == arr[i])
 end) == arr)
-local str = '1024'
-local i = 0
-assert(_.each(str, function(x)
-    i = i + 1
-    assert(x == str[i])
-end) == str)
 
 -- _each
 local arr = {}

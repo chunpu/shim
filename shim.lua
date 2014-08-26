@@ -16,7 +16,7 @@ end
 
 function _.each(arr, fn)
     local tp = type(arr)
-    if tp == 'string' or tp == 'table' then
+    if tp == 'table' then
         local len = #arr
         for i = 1, len do
             fn(arr[i], i, arr)
@@ -28,7 +28,7 @@ end
 function _._each(arr, fn)
     -- break loop when return false
     local tp = type(arr)
-    if tp == 'string' or tp == 'table' then
+    if tp == 'table' then
         local len = #arr
         for i = 1, len do
             if fn(arr[i], i, arr) == false then
