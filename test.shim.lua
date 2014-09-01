@@ -201,7 +201,6 @@ assert(not _.empty('11111'))
 assert(not _.empty({0}))
 assert(not _.empty({1, 2}))
 assert(not _.empty({a = 1}))
-assert(not _.empty({a = 1}))
 
 -- difference
 assert(
