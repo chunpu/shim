@@ -256,15 +256,17 @@ function _.join(arr, sep)
 end
 
 function _.empty(x)
-    if not x then return true end
     local tp = type(x)
-    if tp == 'string' or tp == 'table' then
-        return #x == 0
+    if 'string' == tp then
+        return 0 == #x
+    elseif 'table' == tp then
+        local len = 0
+        for k, v in pairs(x) do
+            len = len + 1
+        end
+        return len == 0
     end
-    if x == 0 then
-        return true
-    end
-    return false
+    return true
 end
 
 function _.difference(arr, other)

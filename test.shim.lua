@@ -190,12 +190,18 @@ assert({
 
 -- empty
 assert(_.empty(false))
-assert(not _.empty(true))
+assert(_.empty(true))
 assert(_.empty({}))
 assert(_.empty(0))
-assert(not _.empty('0'))
-assert(not _.empty(1))
+assert(_.empty(1))
 assert(_.empty(''))
+assert(_.empty(print))
+assert(not _.empty('0'))
+assert(not _.empty('11111'))
+assert(not _.empty({0}))
+assert(not _.empty({1, 2}))
+assert(not _.empty({a = 1}))
+assert(not _.empty({a = 1}))
 
 -- difference
 assert(
