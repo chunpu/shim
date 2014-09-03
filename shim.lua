@@ -27,38 +27,31 @@ end
 
 function _._each(arr, fn)
     -- break loop when return false
-    local tp = type(arr)
-    if tp == 'table' then
-        local len = #arr
-        for i = 1, len do
-            if fn(arr[i], i, arr) == false then
-                break
-            end
-        end
+    local i = 0
+    if 'table' == type(arr) then
+        repeat
+            i = i + 1
+        until false == fn(arr[i], i, arr) or #arr == i
     end
-    return arr
+    return arr, i
 end
 
 function _.every(arr, fn)
-    local flag = true
+    local ret = true
     _._each(arr, function(...)
-        if not fn(...) then
-            flag = false
-            return false  
-        end
+        ret = not not fn(...)
+        return ret
     end)
-    return flag
+    return ret
 end
 
 function _.some(arr, fn)
-    local flag = false
+    local ret
     _._each(arr, function(...)
-        if fn(...) then
-            flag = true
-            return false
-        end
+        ret = fn(...)
+        return not ret
     end)
-    return flag
+    return not not ret
 end
 
 function _.map(arr, fn)
