@@ -133,7 +133,7 @@ assert(
     , _.trim('') == ''
     , _.trim('  qq  ', 'right') == '  qq'
     , _.trim('  qq  ', 'left') == 'qq  '
-    , _.trim(nil) == nil
+    , _.trim(nil) == ''
 )
 
 -- flatten
@@ -178,7 +178,7 @@ assert(
         {'qq', 'ww', 'ee'}
     }, {
         _.split(nil, ''),
-        nil
+        {}
     }
 )
 
@@ -223,6 +223,10 @@ assert(
     {
         _.push({1, 2, 3}, 4, 5),
         {1, 2, 3, 4, 5}
+    },
+    {
+        _.push(nil, 4, 5),
+        {4, 5}
     }
 )
 
@@ -234,7 +238,7 @@ assert(
     },
     {
         _.sub(nil, 2, 3),
-        nil
+        ''
     }
 )
 
@@ -312,6 +316,32 @@ local arr = _({1, 0, 2, 4})
     :filter(function(x) return x < 6 end)
     :value()
 assert({arr, {0, 2, 4}})
+
+-- chain direct
+local function double(val)
+    return val * 2
+end
+local chain1 = _.chain({1, 2, 3}):map(double):value()
+local chain2 = _.chain({2, 3, 4}):map(double):value()
+assert({chain1, {2, 4, 6}})
+assert({chain2, {4, 6, 8}})
+
+-- not mixed
+local chain3 = _({1, 1, 2}):chain()
+local chain4 = _({2, 2, 1}):chain()
+assert({chain3:map(double):value(), {2, 2, 4}})
+assert({chain4:map(double):value(), {4, 4, 2}})
+
+local chain5 = _({1, 1, 2}):chain():map(double)
+local chain6 = _({2, 2, 1}):chain():map(double)
+assert({chain5:value(), {2, 2, 4}})
+assert({chain6:value(), {4, 4, 2}})
+
+-- string chain never crash
+assert({_.chain():map(double):value(), {}})
+assert({_.chain(3333):map(double):value(), {}})
+
+assert(_.chain():split(''):value(), {})
 
 --[[
 print(_.dump({

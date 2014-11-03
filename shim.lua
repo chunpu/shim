@@ -97,13 +97,16 @@ function _.has(list, item)
 end
 
 function _.sub(s, i, j)
+    if 'number' == type(s) then s = tostring(s) end
     if type(s) == 'string' then
         return string.sub(s, i, j)
     end
+    return ''
 end
 
 function _.trim(s, where)
-    if type(s) ~= 'string' then return end
+    if nil == s then return '' end
+    s = tostring(s)
     local i = 1
     local j = #s
     if where ~= 'left' then
@@ -139,6 +142,7 @@ function _.flatten(arr)
 end
 
 function _.push(arr, ...)
+    if 'table' ~= type(arr) then arr = {} end
     local len = #arr
     _.each({...}, function(x, i)
         arr[len + i] = x
@@ -221,7 +225,7 @@ function _.lastIndexOf(arr, val, from, isPlain)
 end
 
 function _.split(str, sep)
-    if type(str) ~= 'string' then return end
+    if type(str) ~= 'string' then return {} end
     local from = 1
     local ret = {}
     local len = #str
@@ -302,6 +306,10 @@ function _.invoke(arr, fn)
             return fn(x)
         end
     end)
+end
+
+function _.chain(val)
+    return _(val):chain()
 end
 
 function _.assertEqual(actual, expect, level)
