@@ -187,6 +187,23 @@ assert({
     _.join({1, 2, 3}, '-'),
     '1-2-3'
 })
+assert({
+        _.join(nil, '-'),
+        ''
+    }, {
+       _.join(2222, '-'),
+       ''
+    }, {
+        _.join({11, nil, '33'}, '-'),
+        '11--33'
+    }, {
+        _.has(_.join({11, {a = 1}, 22}, '-'), 'table'),
+        true
+    }, {
+        _.join({11, 22}, nil),
+        '11nil22'
+    }
+)
 
 -- empty
 assert(_.empty(false))

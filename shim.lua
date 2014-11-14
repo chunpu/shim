@@ -249,7 +249,12 @@ function _.split(str, sep)
 end
 
 function _.join(arr, sep)
-    return table.concat(arr, sep)
+    return table.concat(_.map(arr, function(x)
+        if nil == x then
+            return ''
+        end
+        return tostring(x) or ''
+    end), tostring(sep) or '')
 end
 
 function _.empty(x)
