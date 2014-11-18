@@ -27,13 +27,14 @@ end
 
 function _._each(arr, fn)
     -- break loop when return false
-    local i = 0
+    local len = 0
     if 'table' == type(arr) then
-        repeat
-            i = i + 1
-        until false == fn(arr[i], i, arr) or #arr == i
+        len = #arr
     end
-    return arr, i
+    for i = 1, len do
+        if false == fn(arr[i], i, arr) then break end
+    end
+    return arr
 end
 
 function _.every(arr, fn)

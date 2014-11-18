@@ -39,6 +39,11 @@ assert(_.each(arr, function(x)
     assert(x == arr[i])
 end) == arr)
 
+_.each({}, function()
+    assert(false, 'never access')
+end)
+
+
 -- _each
 local arr = {}
 _._each({1, 2, 3, 4}, function(x)
@@ -48,6 +53,17 @@ end)
 assert(
     {arr, {1, 2}}
 )
+
+local arr2 = {}
+_._each({1, 2, 3, 4}, function(x)
+    table.insert(arr2, x or 'error')
+end)
+assert({arr2, {1, 2, 3, 4}})
+
+_._each({}, function()
+    assert(false, 'never access')
+end)
+
 
 -- some
 local flag = _.some({1, 2, 3}, function(x)
