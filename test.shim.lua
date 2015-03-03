@@ -155,8 +155,8 @@ assert(
 -- flatten
 assert(
     {
-        _.flatten({1, {2, {3, {4}}}}),
-        {1, 2, 3, 4}
+        _.flatten({1, {2}, {3, {{4}}}}),
+        {1, 2, 3, {{4}}}
     }
 )
 
@@ -165,6 +165,15 @@ assert(
     {
         _.uniq({1, 2, 3, 2, 1}),
         {1, 2, 3}
+    }
+)
+
+local tbla = {a = 1}
+local tblb = {b = 1}
+assert(
+    {
+        _.uniq({tbla, tblb, 3, tbla, tblb, tbla}),
+        {tbla, tblb, 3}
     }
 )
 
@@ -315,6 +324,30 @@ assert(
             c = 3,
             d = 4
         }
+    }
+)
+
+-- keys
+assert(
+    {
+        table.sort(_.keys({
+            a = 1,
+            b = 2,
+            c = 3
+        })),
+        table.sort({'a', 'b', 'c'})
+    }
+)
+
+-- keys
+assert(
+    {
+        table.sort(_.keys({
+            a = 1,
+            b = 2,
+            c = 3
+        })),
+        table.sort({1, 2, 3})
     }
 )
 

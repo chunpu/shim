@@ -1,7 +1,11 @@
 local _ = {}
 
+local function isTable(val)
+    return 'table' == type(val)
+end
+
 function _.isArray(t)
-    if type(t) == 'table' then
+    if isTable(t) then
         local i = 0
         for _ in pairs(t) do
             i = i + 1
@@ -16,7 +20,7 @@ end
 
 function _.each(arr, fn)
     local tp = type(arr)
-    if tp == 'table' then
+    if isTable(arr) then
         local len = #arr
         for i = 1, len do
             fn(arr[i], i, arr)
@@ -28,7 +32,7 @@ end
 function _._each(arr, fn)
     -- break loop when return false
     local len = 0
-    if 'table' == type(arr) then
+    if isTable(arr) then
         len = #arr
     end
     for i = 1, len do
@@ -66,7 +70,7 @@ end
 function _.isEqual(a, b)
     -- won't compare metatable
     if a == b then return true end
-    if type(a) == 'table' and type(b) == 'table' then
+    if isTable(a) and isTable(b) then
         for k, v in pairs(a) do
             if not _.isEqual(a[k], b[k]) then
                 return false
@@ -127,23 +131,22 @@ function _.trim(s, where)
     return _.sub(s, i, j)
 end
 
-function _.flatten(arr)
+function _.flatten(arrs)
     local ret = {}
-    _.each(arr, function(x)
-        if type(x) == 'table' then
-            local val = _.flatten(x)
-            _.each(val, function(x)
-                table.insert(ret, x)
+    _.each(arrs, function(arr)
+        if isTable(arr) then
+            _.each(arr, function(x)
+                _.push(ret, x)
             end)
         else
-            table.insert(ret, x)
+            _.push(ret, arr)
         end
     end)
     return ret
 end
 
 function _.push(arr, ...)
-    if 'table' ~= type(arr) then arr = {} end
+    if not isTable(arr) then arr = {} end
     local len = #arr
     _.each({...}, function(x, i)
         arr[len + i] = x
@@ -152,15 +155,12 @@ function _.push(arr, ...)
 end
 
 function _.uniq(arr)
-    -- use hash so not sorted
-    local hash = {}
     local ret = {}
     _.each(arr, function(x)
-        hash[x] = true
+        if not _.has(ret, x) then
+            _.push(ret, x)
+        end
     end)
-    for k, v in pairs(hash) do
-        table.insert(ret, k)
-    end
     return ret
 end
 
@@ -171,7 +171,7 @@ end
 function _.extend(dst, ...)
     local src = {...}
     _.each(src, function(obj)
-        if type(obj) == 'table' then
+        if isTable(obj) then
             for k, v in pairs(obj) do
                 dst[k] = v
             end
@@ -291,6 +291,26 @@ function _.reduce(arr, fn, prev)
         prev = fn(prev, x, i, arr)
     end)
     return prev
+end
+
+function _.keys(hash)
+    local ret = {}
+    if isTable(hash) then
+        for k, v in pairs(hash) do
+            _.push(ret, k)
+        end
+    end
+    return ret
+end
+
+function _.values(hash)
+    local ret = {}
+    if isTable(hash) then
+        for k, v in pairs(hash) do
+            _.push(ret, v)
+        end
+    end
+    return ret
 end
 
 function _.only(obj, keys)
