@@ -226,7 +226,8 @@ function _.lastIndexOf(arr, val, from, isPlain)
 end
 
 function _.split(str, sep)
-    if type(str) ~= 'string' then return {} end
+	if nil == str then return {} end
+	str = tostring(str)
     local from = 1
     local ret = {}
     local len = #str
