@@ -225,14 +225,14 @@ function _.lastIndexOf(arr, val, from, isPlain)
     end
 end
 
-function _.split(str, sep)
+function _.split(str, sep, isPlain)
 	if nil == str then return {} end
 	str = tostring(str)
     local from = 1
     local ret = {}
     local len = #str
     while true do
-        local i, j = str:find(sep, from)
+        local i, j = str:find(sep, from, isPlain)
         if i then
             if i > len then break end
             if j < i then
