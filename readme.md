@@ -37,11 +37,11 @@ chain support
 
 ```lua
 _({1, 0, 2, 4})
-    :chain()
-    :sort()
-    :map(function(x) return x * 2 end)
-    :filter(function(x) return x < 6 end)
-    :value()
+	:chain()
+	:sort()
+	:map(function(x) return x * 2 end)
+	:filter(function(x) return x < 6 end)
+	:value()
 -- => {0, 2, 4}
 ```
 
@@ -49,19 +49,19 @@ pretty print
 
 ```lua
 print(_.dump({
-    a = 1,
-    b = {
-        a = 1,
-        b = {2, 3, 4}
-    }
+	a = 1,
+	b = {
+		a = 1,
+		b = {2, 3, 4}
+	}
 }))
 --[[ =>
 {
-    'b': {
-        'b': [2, 3, 4],
-        'a': 1
-    },
-    'a': 1
+	'b': {
+		'b': [2, 3, 4],
+		'a': 1
+	},
+	'a': 1
 }
 ]]
 ```
