@@ -99,6 +99,9 @@ assert(
 assert(
       _.has('qwert', 'rt')
     , not _.has('qwert', 'tr')
+    , not _.has('qwert', nil)
+    , not _.has('qwert', 1024)
+    , not _.has('qwert')
 
     , _.has({1, 2, 3, 4}, 3)
     , not _.has({1, 2, 3, 4}, 5)
@@ -131,6 +134,12 @@ assert(
 local i, j = _.indexOf('qwerty', 'we')
 assert(i == 2)
 assert(j == 3)
+
+local index = _.indexOf('qwerty')
+assert(not index)
+
+local index = _.indexOf('qnilqqq')
+assert(2 == index)
 
 -- lastIndexOf
 assert(

@@ -90,7 +90,7 @@ end
 function _.has(list, item)
     local tp = type(list)
     if tp == 'string' then
-        return list:find(item) ~= nil
+		return nil ~= _.indexOf(list, item)
     elseif tp == 'table' then
         for k, v in pairs(list) do
             if v == item then
@@ -198,7 +198,7 @@ end
 function _.indexOf(arr, val, from, isPlain)
     local tp = type(arr)
     if tp == 'string' then
-        return string.find(arr, val, from, isPlain)
+        return string.find(arr, tostring(val), from, isPlain)
     end
     if tp == 'table' then
         for i = from or 1, #arr do
