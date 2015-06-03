@@ -87,6 +87,15 @@ local flag = _.every({1, 2, 3}, function(x)
 end)
 assert(not flag)
 
+-- find
+assert(3 == _.find({1, 2, 3, 4, 5}, function(x)
+	return x >= 3
+end))
+
+assert(nil == _.find({1, 2, 3, 4, 5}, function(x)
+	return x >= 6
+end))
+
 -- map
 local arr = {1, 0, 2, 4}
 assert(

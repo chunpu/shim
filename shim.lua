@@ -59,6 +59,17 @@ function _.some(arr, fn)
 	return not not ret
 end
 
+function _.find(arr, fn)
+	local ret
+	_._each(arr, function(item, i, arr)
+		if (fn(item, i, arr)) then
+			ret = item
+			return false
+		end
+	end)
+	return ret
+end
+
 function _.map(arr, fn)
 	local ret = {}
 	_.each(arr, function(x, i, arr)
