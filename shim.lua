@@ -62,7 +62,7 @@ end
 function _.find(arr, fn)
 	local ret
 	_._each(arr, function(item, i, arr)
-		if (fn(item, i, arr)) then
+		if fn(item, i, arr) then
 			ret = item
 			return false
 		end
