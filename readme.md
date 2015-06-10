@@ -13,7 +13,7 @@ Install
 ---
 
 ```bash
-$ wget --no-check-certificate https://raw.githubusercontent.com/chunpu/Shim/master/shim.lua
+wget --no-check-certificate https://raw.githubusercontent.com/chunpu/Shim/master/shim.lua
 ```
 
 Usage
