@@ -416,6 +416,21 @@ assert(
 	}
 )
 
+-- get
+assert(
+	{
+		_.get({a = {{b = {c = 3}}}}, {'a', 1, 'b', 'c'}),
+		3
+	},
+	{
+		_.get({a = 1}, {}),
+		nil
+	},
+	{
+		_.get(3, {1, 2}),
+		nil
+	}
+)
 
 -- invoke
 assert(

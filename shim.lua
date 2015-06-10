@@ -346,6 +346,19 @@ function _.mapValues(obj, fn)
 	return ret
 end
 
+function _.get(obj, arr)
+	if isTable(obj) and arr and arr[1] then
+		_._each(arr, function(key)
+			if isTable(obj) and obj[key] then
+				obj = obj[key]
+			else
+				return false
+			end
+		end)
+		return obj
+	end
+end
+
 function _.only(obj, keys)
 	obj = obj or {}
 	if type(keys) == 'string' then
