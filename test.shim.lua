@@ -354,26 +354,68 @@ assert(
 -- keys
 assert(
 	{
-		table.sort(_.keys({
+		_.sort(_.keys({
 			a = 1,
 			b = 2,
 			c = 3
 		})),
-		table.sort({'a', 'b', 'c'})
+		_.sort({'a', 'b', 'c'})
 	}
 )
 
--- keys
+-- values
 assert(
 	{
-		table.sort(_.keys({
+		_.sort(_.values({
 			a = 1,
 			b = 2,
 			c = 3
 		})),
-		table.sort({1, 2, 3})
+		_.sort({1, 2, 3})
 	}
 )
+
+-- forIn
+local forInObj = {a = 1, b = 2}
+local forInArr = {}
+_.forIn(forInObj, function(val, key, obj)
+	assert(forInObj == obj)
+	assert(val == obj[key])
+	_.push(forInArr, val)
+end)
+assert({
+	_.sort(forInArr),
+	_.sort({1, 2})
+})
+
+_.forIn(nil, function()
+	assert(false)
+end)
+
+_.forIn(2, function()
+	assert(false)
+end)
+
+-- mapKeys
+assert(
+	{
+		_.mapKeys({a = 1, b = 2}, function(val, key)
+			return key .. val
+		end),
+		{a1 = 1, b2 = 2}
+	}
+)
+
+-- mapValues
+assert(
+	{
+		_.mapValues({a = 1, b = 2}, function(val, key)
+			return val * 3
+		end),
+		{a = 3, b = 6}
+	}
+)
+
 
 -- invoke
 assert(

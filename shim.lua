@@ -305,23 +305,44 @@ function _.reduce(arr, fn, prev)
 	return prev
 end
 
-function _.keys(hash)
-	local ret = {}
-	if isTable(hash) then
-		for k, v in pairs(hash) do
-			_.push(ret, k)
+function _.forIn(obj, fn)
+	if isTable(obj) then
+		for key, val in pairs(obj) do
+			fn(val, key, obj)
 		end
 	end
+end
+
+function _.keys(obj)
+	local ret = {}
+	_.forIn(obj, function(val, key)
+		_.push(ret, key)
+	end)
 	return ret
 end
 
-function _.values(hash)
+function _.values(obj)
 	local ret = {}
-	if isTable(hash) then
-		for k, v in pairs(hash) do
-			_.push(ret, v)
-		end
-	end
+	_.forIn(obj, function(val)
+		_.push(ret, val)
+	end)
+	return ret
+end
+
+function _.mapKeys(obj, fn)
+	local ret = {}
+	_.forIn(obj, function(val, key)
+		local newKey = fn(val, key, obj)
+		if newKey then ret[newKey] = val end
+	end)
+	return ret
+end
+
+function _.mapValues(obj, fn)
+	local ret = {}
+	_.forIn(obj, function(val, key)
+		ret[key] = fn(val, key, obj)
+	end)
 	return ret
 end
 
