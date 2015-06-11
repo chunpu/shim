@@ -146,9 +146,6 @@ assert(j == 3)
 local index = _.indexOf('qwerty')
 assert(not index)
 
-local index = _.indexOf('qnilqqq')
-assert(2 == index)
-
 -- lastIndexOf
 assert(
 	  _.lastIndexOf({11, 22, 33, 11}, 11) == 4

@@ -1,6 +1,6 @@
 local _ = {}
 
--- Basic Util
+local push = table.insert
 
 -- is
 
@@ -28,15 +28,6 @@ local function isNil(val)
 	return nil == val
 end
 
-local function tostr(val)
-	if not isString(val) then
-		if nil ~= val then
-			val = tostring(val)
-		end
-	end
-	return val or ''
-end
-
 _.isTable = isTable
 _.isNumber = isNumber
 _.isString = isString
@@ -44,6 +35,8 @@ _.isFunction = isFunction
 _.isBoolean = isBoolean
 _.isNil = isNil
 
+
+-- Basic Util
 
 -- basic each
 local function each(arr, fn)
@@ -68,6 +61,15 @@ local function forIn(obj, fn)
 	end
 end
 
+local function tostr(val)
+	if not isString(val) then
+		if nil ~= val then
+			val = tostring(val)
+		end
+	end
+	return val or ''
+end
+
 local function findIndex(arr, fn)
 	local ret
 	each(arr, function(val, i, arr)
@@ -81,6 +83,7 @@ end
 
 _._each = each
 _.forIn = forIn
+_.toString = tostr
 _.findIndex = findIndex
 
 -- Iteration
@@ -189,10 +192,10 @@ function _.flatten(arrs)
 	each(arrs, function(arr)
 		if isTable(arr) then
 			each(arr, function(x)
-				_.push(ret, x)
+				push(ret, x)
 			end)
 		else
-			_.push(ret, arr)
+			push(ret, arr)
 		end
 	end)
 	return ret
@@ -201,7 +204,7 @@ end
 function _.push(arr, ...)
 	if not isTable(arr) then return arr end
 	each({...}, function(x, i)
-		table.insert(arr, x)
+		push(arr, x)
 	end)
 	return arr
 end
@@ -210,7 +213,7 @@ function _.uniq(arr)
 	local ret = {}
 	each(arr, function(x)
 		if not _.has(ret, x) then
-			_.push(ret, x)
+			push(ret, x)
 		end
 	end)
 	return ret
@@ -243,7 +246,7 @@ function _.filter(arr, fn)
 	local ret = {}
 	each(arr, function(x)
 		if fn(x) then
-			_.push(ret, x)
+			push(ret, x)
 		end
 	end)
 	return ret
@@ -251,9 +254,11 @@ end
 
 function _.indexOf(arr, sub, from, isPlain)
 	-- deprecated from
-	local tp = type(arr)
-	if tp == 'string' then
-		return string.find(arr, tostring(sub), from, isPlain)
+	if isString(arr) then
+		sub = tostr(sub)
+		if '' ~= sub then
+			return string.find(arr, sub, from, isPlain)
+		end
 	end
 	return findIndex(arr, function(item)
 		return item == sub
@@ -277,8 +282,7 @@ function _.lastIndexOf(arr, val, from, isPlain)
 end
 
 function _.split(str, sep, isPlain)
-	if nil == str then return {} end
-	str = tostring(str)
+	str = tostr(str)
 	local from = 1
 	local ret = {}
 	local len = #str
@@ -291,10 +295,10 @@ function _.split(str, sep, isPlain)
 				j = i
 				i = i + 1
 			end
-			table.insert(ret, str:sub(from, i - 1))
+			push(ret, str:sub(from, i - 1))
 			from = j + 1
 		else
-			table.insert(ret, str:sub(from, len))
+			push(ret, str:sub(from, len))
 			break
 		end
 	end
@@ -323,7 +327,7 @@ function _.difference(arr, other)
 	local ret = {}
 	each(arr, function(x)
 		if not _.has(other, x) then
-			table.insert(ret, x)
+			push(ret, x)
 		end
 	end)
 	return ret
@@ -344,7 +348,7 @@ end
 function _.keys(obj)
 	local ret = {}
 	forIn(obj, function(val, key)
-		_.push(ret, key)
+		push(ret, key)
 	end)
 	return ret
 end
@@ -352,7 +356,7 @@ end
 function _.values(obj)
 	local ret = {}
 	forIn(obj, function(val)
-		_.push(ret, val)
+		push(ret, val)
 	end)
 	return ret
 end
@@ -389,7 +393,7 @@ end
 
 function _.only(obj, keys)
 	obj = obj or {}
-	if type(keys) == 'string' then
+	if isString(keys) then
 		keys = _.split(keys, ' +')
 	end
 	return _.reduce(keys, function(ret, key)
@@ -475,7 +479,7 @@ function dumpTable(o, lastIndent)
 	local ret = '{\n'
 	local arr = {}
 	for k, v in pairs(o) do
-		table.insert(arr, indent .. dump(k) .. ': ' .. dump(v, indent))
+		push(arr, indent .. dump(k) .. ': ' .. dump(v, indent))
 	end
 	ret = ret .. table.concat(arr, ',\n') .. '\n' .. lastIndent .. '}'
 	return ret
