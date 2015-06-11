@@ -1,8 +1,89 @@
 local _ = {}
 
+-- Basic Util
+
+-- is
+
 local function isTable(val)
 	return 'table' == type(val)
 end
+
+local function isNumber(val)
+	return 'number' == type(val)
+end
+
+local function isString(val)
+	return 'string' == type(val)
+end
+
+local function isFunction(val)
+	return 'function' == type(val)
+end
+
+local function isBoolean(val)
+	return 'boolean' == type(val)
+end
+
+local function isNil(val)
+	return nil == val
+end
+
+local function tostr(val)
+	if not isString(val) then
+		if nil ~= val then
+			val = tostring(val)
+		end
+	end
+	return val or ''
+end
+
+_.isTable = isTable
+_.isNumber = isNumber
+_.isString = isString
+_.isFunction = isFunction
+_.isBoolean = isBoolean
+_.isNil = isNil
+
+
+-- basic each
+local function each(arr, fn)
+	if isTable(arr) then
+		local len = #arr
+		for i = 1, len do
+			if false == fn(arr[i], i, arr) then
+				return
+			end
+		end
+	end
+end
+
+-- basic for in
+local function forIn(obj, fn)
+	if isTable(obj) then
+		for key, val in pairs(obj) do
+			if false == fn(val, key, obj) then
+				return
+			end
+		end
+	end
+end
+
+local function findIndex(arr, fn)
+	local ret
+	each(arr, function(val, i, arr)
+		if fn(val, i, arr) then
+			ret = i
+			return false
+		end
+	end)
+	return ret
+end
+
+_._each = each
+_.forIn = forIn
+_.findIndex = findIndex
+
+-- Iteration
 
 function _.isArray(t)
 	if isTable(t) then
@@ -18,61 +99,37 @@ function _.isArray(t)
 	return false
 end
 
-function _.each(arr, fn)
-	local tp = type(arr)
-	if isTable(arr) then
-		local len = #arr
-		for i = 1, len do
-			fn(arr[i], i, arr)
-		end
+function _.negate(fn)
+	return function(...)
+		return not fn(...)
 	end
-	return arr
 end
 
-function _._each(arr, fn)
-	-- break loop when return false
-	local len = 0
-	if isTable(arr) then
-		len = #arr
-	end
-	for i = 1, len do
-		if false == fn(arr[i], i, arr) then break end
-	end
+function _.each(arr, fn)
+	each(arr, function(...)
+		fn(...)
+	end)
 	return arr
 end
 
 function _.every(arr, fn)
-	local ret = true
-	_._each(arr, function(...)
-		ret = not not fn(...)
-		return ret
-	end)
-	return ret
+	return nil == findIndex(arr, _.negate(fn))
 end
 
 function _.some(arr, fn)
-	local ret
-	_._each(arr, function(...)
-		ret = fn(...)
-		return not ret
-	end)
-	return not not ret
+	return nil ~= findIndex(arr, fn)
 end
 
 function _.find(arr, fn)
-	local ret
-	_._each(arr, function(item, i, arr)
-		if fn(item, i, arr) then
-			ret = item
-			return false
-		end
-	end)
-	return ret
+	local i = findIndex(arr, fn)
+	if i then
+		return arr[i]
+	end
 end
 
 function _.map(arr, fn)
 	local ret = {}
-	_.each(arr, function(x, i, arr)
+	each(arr, function(x, i, arr)
 		ret[i] = fn(x, i, arr)
 	end)
 	return ret
@@ -98,41 +155,26 @@ function _.isEqual(a, b)
 	end
 end
 
-function _.has(list, item)
-	local tp = type(list)
-	if tp == 'string' then
-		return nil ~= _.indexOf(list, item)
-	elseif tp == 'table' then
-		for k, v in pairs(list) do
-			if v == item then
-				return true
-			end
-		end
-	end
-	return false
+function _.has(val, sub)
+	return nil ~= _.indexOf(val, sub)
 end
 
 function _.sub(s, i, j)
-	if 'number' == type(s) then s = tostring(s) end
-	if type(s) == 'string' then
-		return string.sub(s, i, j)
-	end
-	return ''
+	return string.sub(tostr(s), i, j)
 end
 
 function _.trim(s, where)
-	if nil == s then return '' end
-	s = tostring(s)
+	s = tostr(s)
 	local i = 1
 	local j = #s
-	if where ~= 'left' then
+	if 'left' ~= where then
 		-- match right space
 		local a, b = _.lastIndexOf(s, '%s+')
 		if b == j then
 			j = a - 1
 		end
 	end
-	if where ~= 'right' then
+	if 'right' ~= where then
 		-- match left space
 		local a, b = _.indexOf(s, '%s+')
 		if a == 1 then
@@ -144,9 +186,9 @@ end
 
 function _.flatten(arrs)
 	local ret = {}
-	_.each(arrs, function(arr)
+	each(arrs, function(arr)
 		if isTable(arr) then
-			_.each(arr, function(x)
+			each(arr, function(x)
 				_.push(ret, x)
 			end)
 		else
@@ -157,17 +199,16 @@ function _.flatten(arrs)
 end
 
 function _.push(arr, ...)
-	if not isTable(arr) then arr = {} end
-	local len = #arr
-	_.each({...}, function(x, i)
-		arr[len + i] = x
+	if not isTable(arr) then return arr end
+	each({...}, function(x, i)
+		table.insert(arr, x)
 	end)
 	return arr
 end
 
 function _.uniq(arr)
 	local ret = {}
-	_.each(arr, function(x)
+	each(arr, function(x)
 		if not _.has(ret, x) then
 			_.push(ret, x)
 		end
@@ -180,44 +221,43 @@ function _.union(...)
 end
 
 function _.extend(dst, ...)
-	local src = {...}
-	_.each(src, function(obj)
-		if isTable(obj) then
-			for k, v in pairs(obj) do
-				dst[k] = v
-			end
-		end
-	end)
+	if isTable(dst) then
+		local src = {...}
+		each(src, function(obj)
+			forIn(obj, function(val, key)
+				dst[key] = val
+			end)
+		end)
+	end
 	return dst
 end
 
 function _.sort(t, fn)
-	table.sort(t, fn)
+	if isTable(t) then
+		table.sort(t, fn)
+	end
 	return t
 end
 
 function _.filter(arr, fn)
 	local ret = {}
-	_.each(arr, function(x)
+	each(arr, function(x)
 		if fn(x) then
-			table.insert(ret, x)
+			_.push(ret, x)
 		end
 	end)
 	return ret
 end
 
-function _.indexOf(arr, val, from, isPlain)
+function _.indexOf(arr, sub, from, isPlain)
+	-- deprecated from
 	local tp = type(arr)
 	if tp == 'string' then
-		return string.find(arr, tostring(val), from, isPlain)
+		return string.find(arr, tostring(sub), from, isPlain)
 	end
-	if tp == 'table' then
-		for i = from or 1, #arr do
-			if arr[i] == val then
-				return i
-			end
-		end
-	end
+	return findIndex(arr, function(item)
+		return item == sub
+	end)
 end
 
 function _.lastIndexOf(arr, val, from, isPlain)
@@ -262,12 +302,7 @@ function _.split(str, sep, isPlain)
 end
 
 function _.join(arr, sep)
-	return table.concat(_.map(arr, function(x)
-		if nil == x then
-			return ''
-		end
-		return tostring(x) or ''
-	end), tostring(sep) or '')
+	return table.concat(_.map(arr, tostr), tostr(sep))
 end
 
 function _.empty(x)
@@ -286,7 +321,7 @@ end
 
 function _.difference(arr, other)
 	local ret = {}
-	_.each(arr, function(x)
+	each(arr, function(x)
 		if not _.has(other, x) then
 			table.insert(ret, x)
 		end
@@ -299,23 +334,16 @@ function _.without(arr, ...)
 end
 
 function _.reduce(arr, fn, prev)
-	_.each(arr, function(x, i)
+	each(arr, function(x, i)
 		prev = fn(prev, x, i, arr)
 	end)
 	return prev
 end
 
-function _.forIn(obj, fn)
-	if isTable(obj) then
-		for key, val in pairs(obj) do
-			fn(val, key, obj)
-		end
-	end
-end
 
 function _.keys(obj)
 	local ret = {}
-	_.forIn(obj, function(val, key)
+	forIn(obj, function(val, key)
 		_.push(ret, key)
 	end)
 	return ret
@@ -323,7 +351,7 @@ end
 
 function _.values(obj)
 	local ret = {}
-	_.forIn(obj, function(val)
+	forIn(obj, function(val)
 		_.push(ret, val)
 	end)
 	return ret
@@ -331,7 +359,7 @@ end
 
 function _.mapKeys(obj, fn)
 	local ret = {}
-	_.forIn(obj, function(val, key)
+	forIn(obj, function(val, key)
 		local newKey = fn(val, key, obj)
 		if newKey then ret[newKey] = val end
 	end)
@@ -340,7 +368,7 @@ end
 
 function _.mapValues(obj, fn)
 	local ret = {}
-	_.forIn(obj, function(val, key)
+	forIn(obj, function(val, key)
 		ret[key] = fn(val, key, obj)
 	end)
 	return ret
@@ -348,7 +376,7 @@ end
 
 function _.get(obj, arr)
 	if isTable(obj) and arr and arr[1] then
-		_._each(arr, function(key)
+		each(arr, function(key)
 			if isTable(obj) and obj[key] then
 				obj = obj[key]
 			else
@@ -374,7 +402,7 @@ end
 
 function _.invoke(arr, fn)
 	return _.map(arr, function(x)
-		if type(fn) == 'function' then
+		if isFunction(fn) then
 			return fn(x)
 		end
 	end)
@@ -394,8 +422,8 @@ end
 
 function _.ok(...)
 	local arr = {...}
-	_.each(arr, function(x)
-		if type(x) == 'table' then
+	each(arr, function(x)
+		if isTable(x) then
 			_.assertEqual(x[1], x[2], 5)
 		else
 			_.assertEqual(x, true, 5)
