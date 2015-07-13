@@ -379,14 +379,16 @@ function _.mapValues(obj, fn)
 end
 
 function _.get(obj, arr)
-	if isTable(obj) and arr and arr[1] then
-		each(arr, function(key)
-			if isTable(obj) and obj[key] then
-				obj = obj[key]
-			else
-				return false
-			end
-		end)
+	local matched
+	each(arr, function(key)
+		if isTable(obj) and obj[key] then
+			obj = obj[key]
+			matched = true
+		else
+			return false
+		end
+	end)
+	if matched then
 		return obj
 	end
 end
