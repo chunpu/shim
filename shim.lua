@@ -378,18 +378,24 @@ function _.mapValues(obj, fn)
 	return ret
 end
 
-function _.get(obj, arr)
-	local matched
-	each(arr, function(key)
-		if isTable(obj) and obj[key] then
-			obj = obj[key]
-			matched = true
-		else
-			return false
-		end
-	end)
-	if matched then
-		return obj
+local function toPath(arr)
+	if isTable(arr) then
+		return arr
+	end
+	-- TODO support string
+	return {}
+end
+
+function _.get(obj, path)
+	path = toPath(path)
+	if #path > 0 then
+		local flag = _.every(path, function(key)
+			if isTable(obj) and nil ~= obj[key] then
+				obj = obj[key]
+				return true
+			end
+		end)
+		if flag then return obj end
 	end
 end
 
