@@ -104,17 +104,17 @@ assert(
 	end), {2, 1, 3, 5}}
 )
 
--- has
+-- includes
 assert(
-	  _.has('qwert', 'rt')
-	, not _.has('qwert', 'tr')
-	, not _.has('qwert', nil)
-	, not _.has('qwert', 1024)
-	, not _.has('qwert')
+	  _.includes('qwert', 'rt')
+	, not _.includes('qwert', 'tr')
+	, not _.includes('qwert', nil)
+	, not _.includes('qwert', 1024)
+	, not _.includes('qwert')
 
-	, _.has({1, 2, 3, 4}, 3)
-	, not _.has({1, 2, 3, 4}, 5)
-	, not _.has({a = 1, b = 2}, 3)
+	, _.includes({1, 2, 3, 4}, 3)
+	, not _.includes({1, 2, 3, 4}, 5)
+	, not _.includes({a = 1, b = 2}, 3)
 )
 
 -- extend
@@ -242,7 +242,7 @@ assert({
 		_.join({11, nil, '33'}, '-'),
 		'11--33'
 	}, {
-		_.has(_.join({11, {a = 1}, 22}, '-'), 'table'),
+		_.includes(_.join({11, {a = 1}, 22}, '-'), 'table'),
 		true
 	}, {
 		_.join({11, 22}, nil),

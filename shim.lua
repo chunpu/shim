@@ -158,7 +158,7 @@ function _.isEqual(a, b)
 	end
 end
 
-function _.has(val, sub)
+function _.includes(val, sub)
 	return nil ~= _.indexOf(val, sub)
 end
 
@@ -212,7 +212,7 @@ end
 function _.uniq(arr)
 	local ret = {}
 	each(arr, function(x)
-		if not _.has(ret, x) then
+		if not _.includes(ret, x) then
 			push(ret, x)
 		end
 	end)
@@ -326,7 +326,7 @@ end
 function _.difference(arr, other)
 	local ret = {}
 	each(arr, function(x)
-		if not _.has(other, x) then
+		if not _.includes(other, x) then
 			push(ret, x)
 		end
 	end)
