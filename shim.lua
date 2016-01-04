@@ -474,9 +474,9 @@ function call(_, val)
 	return ret
 end
 
-local dump, dumpTable
+local _dump, _dumpTable
 
-function dumpTable(o, lastIndent)
+function _dumpTable(o, lastIndent)
 	if type(lastIndent) ~= 'string' then
 		lastIndent = ''
 	end
@@ -487,36 +487,38 @@ function dumpTable(o, lastIndent)
 	local ret = '{\n'
 	local arr = {}
 	for k, v in pairs(o) do
-		push(arr, indent .. dump(k) .. ': ' .. dump(v, indent))
+		push(arr, indent .. _dump(k) .. ': ' .. _dump(v, indent))
 	end
 	ret = ret .. table.concat(arr, ',\n') .. '\n' .. lastIndent .. '}'
 	return ret
 end
 
 -- TODO multi args
-function dump(v, indent)
+function _dump(v, indent)
 	local t = type(v)
-	if t == 'number' or t == 'boolean' then
+	if nil == v or 'number' == t or 'boolean' == t then
 		return tostring(v)
 	elseif t == 'string' then
-		return "'" .. v .. "'"
+		return '"' .. v .. '"' -- same as chrome
 	elseif t == 'table' then
 		if _.isArray(v) then
-			return '[' .. table.concat(_.map(v, function(x)
-				return dump(x, indent)
+			return '[' .. _.join(_.map(v, function(x)
+				return _dump(x, indent)
 			end) , ', ') .. ']'
 		else
-			return dumpTable(v, indent)
+			return _dumpTable(v, indent)
 		end
-	elseif t == 'nil' then
-		return 'null'
 	end
 	return '[' .. t .. ']'
 end
 
 -- TODO other function
 
-_.dump = dump
+_.dump = function(...)
+	return _.join(_.map({...}, function(val)
+		return _dump(val)
+	end), ' ')
+end
 
 setmetatable(_, {__call = call})
 

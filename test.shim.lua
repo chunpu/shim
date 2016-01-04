@@ -494,6 +494,12 @@ assert({_.chain(3333):map(double):value(), {}})
 
 assert(_.chain():split(''):value(), {})
 
+local dumpedString1 = _.dump(123, true, nil, '321')
+assert(dumpedString1 == '123 true nil "321"')
+-- local dumpedString2 = _.dump({1, nil, true, '2'})
+local dumpedString2 = _.dump({1, 2, 3, 4})
+assert(dumpedString2 == '[1, 2, 3, 4]')
+
 --[[
 print(_.dump({
 	a = 1,
