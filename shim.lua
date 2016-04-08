@@ -36,6 +36,8 @@ _.isBoolean = isBoolean
 _.isNil = isNil
 
 
+-- list start
+
 -- Basic Util
 
 -- basic each
@@ -163,28 +165,8 @@ function _.includes(val, sub)
 end
 
 function _.sub(s, i, j)
+	-- TODO add list support
 	return string.sub(tostr(s), i, j)
-end
-
-function _.trim(s, where)
-	s = tostr(s)
-	local i = 1
-	local j = #s
-	if 'left' ~= where then
-		-- match right space
-		local a, b = _.lastIndexOf(s, '%s+')
-		if b == j then
-			j = a - 1
-		end
-	end
-	if 'right' ~= where then
-		-- match left space
-		local a, b = _.indexOf(s, '%s+')
-		if a == 1 then
-			i = b + 1
-		end
-	end
-	return _.sub(s, i, j)
 end
 
 function _.flatten(arrs)
@@ -279,30 +261,6 @@ function _.lastIndexOf(arr, val, from, isPlain)
 			i = i - 1
 		end
 	end
-end
-
-function _.split(str, sep, isPlain)
-	str = tostr(str)
-	local from = 1
-	local ret = {}
-	local len = #str
-	while true do
-		local i, j = str:find(sep, from, isPlain)
-		if i then
-			if i > len then break end
-			if j < i then
-				-- sep == ''
-				j = i
-				i = i + 1
-			end
-			push(ret, str:sub(from, i - 1))
-			from = j + 1
-		else
-			push(ret, str:sub(from, len))
-			break
-		end
-	end
-	return ret
 end
 
 function _.join(arr, sep)
@@ -420,6 +378,59 @@ function _.invoke(arr, fn)
 	end)
 end
 
+-- list end
+
+-- string start
+
+function _.split(str, sep, isPlain)
+	str = tostr(str)
+	local from = 1
+	local ret = {}
+	local len = #str
+	while true do
+		local i, j = str:find(sep, from, isPlain)
+		if i then
+			if i > len then break end
+			if j < i then
+				-- sep == ''
+				j = i
+				i = i + 1
+			end
+			push(ret, str:sub(from, i - 1))
+			from = j + 1
+		else
+			push(ret, str:sub(from, len))
+			break
+		end
+	end
+	return ret
+end
+
+function _.trim(s, where)
+	s = tostr(s)
+	local i = 1
+	local j = #s
+	if 'left' ~= where then
+		-- match right space
+		local a, b = _.lastIndexOf(s, '%s+')
+		if b == j then
+			j = a - 1
+		end
+	end
+	if 'right' ~= where then
+		-- match left space
+		local a, b = _.indexOf(s, '%s+')
+		if a == 1 then
+			i = b + 1
+		end
+	end
+	return _.sub(s, i, j)
+end
+
+-- string end
+
+-- other start
+
 function _.chain(val)
 	return _(val):chain()
 end
@@ -519,6 +530,8 @@ _.dump = function(...)
 		return _dump(val)
 	end), ' ')
 end
+
+-- other end
 
 setmetatable(_, {__call = call})
 
