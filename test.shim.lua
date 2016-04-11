@@ -129,41 +129,52 @@ test('includes', function(t)
 		, not _.includes({1, 2, 3, 4}, 5)
 		, not _.includes({a = 1, b = 2}, 3)
 	}
+
 	_.each(arr, function(val)
 		t.ok(val)
 	end)
 end)
 
--- extend
-assert(
-	  {_.extend({a = 1}, {b = 2}), {a = 1, b = 2}}
-	, {_.extend(nil, {a = 1}), nil}
-	, {_.extend({a = 1}, {a = 2}), {a = 2}}
-	, {_.extend({a = 1}), {a = 1}}
-	, {_.extend({a = 1}, {b = 2}, {c = 3}), {a = 1, b = 2, c = 3}}
-)
+test('extend', function(t)
+	local arr = {
+		  {_.extend({a = 1}, {b = 2}), {a = 1, b = 2}}
+		, {_.extend(nil, {a = 1}), nil}
+		, {_.extend({a = 1}, {a = 2}), {a = 2}}
+		, {_.extend({a = 1}), {a = 1}}
+		, {_.extend({a = 1}, {b = 2}, {c = 3}), {a = 1, b = 2, c = 3}}
+	}
+	
+	_.each(arr, function(val)
+		t.ok(val)
+	end)
+end)
 
--- filter
-assert(
-	{_.filter({1, 2, 3, 4, 5}, function(x)
+test('filter', function(t)
+	t.deepEqual(_.filter({1, 2, 3, 4, 5}, function(x)
 		return x > 3
-	end), {4, 5}}
-)
+	end), {4, 5})
+end)
 
--- indexOf
-assert(
-	  _.indexOf({11, 22, 33}, 22) == 2
-	, _.indexOf({11, 22, 33}, 44) == nil
-	--, _.indexOf({11, 22, 33, 33, 22, 11}, 22, 3) == 5
-)
-local i, j = _.indexOf('qwerty', 'we')
-assert(i == 2)
-assert(j == 3)
+test('indexOf', function(t)
+	local arr = {
+		  _.indexOf({11, 22, 33}, 22) == 2
+		, _.indexOf({11, 22, 33}, 44) == nil
+		--, _.indexOf({11, 22, 33, 33, 22, 11}, 22, 3) == 5
+	}
 
-local index = _.indexOf('qwerty')
-assert(not index)
+	_.each(arr, function(val)
+		t.ok(val)
+	end)
 
--- lastIndexOf
+	local i, j = _.indexOf('qwerty', 'we')
+	t.ok(i == 2)
+	t.ok(j == 3)
+
+	local index = _.indexOf('qwerty')
+	t.ok(not index)
+end)
+
+test('lastIndexOf', function(t)
 assert(
 	  _.lastIndexOf({11, 22, 33, 11}, 11) == 4
 	, _.lastIndexOf({11, 22, 33, 11}, 0) == nil
@@ -172,8 +183,9 @@ assert(
 local i, j = _.lastIndexOf('qweqwe', 'we')
 assert(i == 5)
 assert(j == 6)
+end)
 
--- trim
+test('trim', function(t)
 assert(
 	  _.trim('  qq  ') == 'qq'
 	, _.trim('   ') == ''
@@ -182,16 +194,18 @@ assert(
 	, _.trim('  qq  ', 'left') == 'qq  '
 	, _.trim(nil) == ''
 )
+end)
 
--- flatten
+test('flatten', function(t)
 assert(
 	{
 		_.flatten({1, {2}, {3, {{4}}}}),
 		{1, 2, 3, {{4}}}
 	}
 )
+end)
 
--- uniq
+test('uniq', function(t)
 assert(
 	{
 		_.uniq({1, 2, 3, 2, 1}),
@@ -207,16 +221,18 @@ assert(
 		{tbla, tblb, 3}
 	}
 )
+end)
 
--- union
+test('union', function(t)
 assert(
 	{
 		_.sort(_.union({1, 2, 3}, {5, 2, 1, 4}, {2, 1})),
 		{1, 2, 3, 4, 5}
 	}
 )
+end)
 
--- split
+test('split', function(t)
 assert(
 	{
 		_.split('q,w,e,r', ','),
@@ -243,8 +259,9 @@ assert(
 		{'127', '0', '0', '1'}
 	}
 )
+end)
 
--- join
+test('join', function(t)
 assert({
 	_.join({1, 2, 3}, '-'),
 	'1-2-3'
@@ -266,8 +283,9 @@ assert({
 		'1122'
 	}
 )
+end)
 
--- empty
+test('empty', function(t)
 assert(_.empty(false))
 assert(_.empty(true))
 assert(_.empty({}))
@@ -280,24 +298,27 @@ assert(not _.empty('11111'))
 assert(not _.empty({0}))
 assert(not _.empty({1, 2}))
 assert(not _.empty({a = 1}))
+end)
 
--- difference
+test('difference', function(t)
 assert(
 	{
 		_.difference({1, 2, 3, 4, 5}, {5, 2, 10}),
 		{1, 3, 4}
 	}
 )
+end)
 
--- without
+test('without', function(t)
 assert(
 	{
 		_.without({1, 4, 3, nil, 0, ''}, nil, 0, ''),
 		{1, 4, 3}
 	}
 )
+end)
 
--- push
+test('push', function(t)
 assert(
 	{
 		_.push({1, 2, 3}, 4, 5),
@@ -308,8 +329,9 @@ assert(
 		nil
 	}
 )
+end)
 
--- sub
+test('sub', function(t)
 assert(
 	{
 		_.sub('qwer', 2, 3),
@@ -320,8 +342,9 @@ assert(
 		''
 	}
 )
+end)
 
--- reduce
+test('reduce', function(t)
 assert(
 	{
 		_.reduce({}, function() end),
@@ -338,8 +361,9 @@ assert(
 		10
 	}
 )
+end)
 
--- only
+test('only', function(t)
 assert(
 	{
 		_.only({
@@ -363,8 +387,9 @@ assert(
 		}
 	}
 )
+end)
 
--- keys
+test('keys', function(t)
 assert(
 	{
 		_.sort(_.keys({
@@ -375,8 +400,9 @@ assert(
 		_.sort({'a', 'b', 'c'})
 	}
 )
+end)
 
--- values
+test('values', function(t)
 assert(
 	{
 		_.sort(_.values({
@@ -387,8 +413,9 @@ assert(
 		_.sort({1, 2, 3})
 	}
 )
+end)
 
--- forIn
+test('forIn', function(t)
 local forInObj = {a = 1, b = 2}
 local forInArr = {}
 _.forIn(forInObj, function(val, key, obj)
@@ -408,8 +435,9 @@ end)
 _.forIn(2, function()
 	assert(false)
 end)
+end)
 
--- mapKeys
+test('mapKeys', function(t)
 assert(
 	{
 		_.mapKeys({a = 1, b = 2}, function(val, key)
@@ -418,8 +446,9 @@ assert(
 		{a1 = 1, b2 = 2}
 	}
 )
+end)
 
--- mapValues
+test('mapValues', function(t)
 assert(
 	{
 		_.mapValues({a = 1, b = 2}, function(val, key)
@@ -428,8 +457,9 @@ assert(
 		{a = 3, b = 6}
 	}
 )
+end)
 
--- get
+test('get', function(t)
 assert(
 	{
 		_.get({a = {{b = {c = 3}}}}, {'a', 1, 'b', 'c'}),
@@ -452,8 +482,9 @@ assert(
 		nil
 	}
 )
+end)
 
--- invoke
+test('invoke', function(t)
 assert(
 	{
 		_.invoke({'1', '2', '3'}, tonumber),
@@ -468,15 +499,17 @@ assert(
 		{{1, 2, 3}, {4, 5, 6}}
 	}
 )
+end)
 
--- wrapper
+test('wrapper', function(t)
 local arr = _({1, 2, 3}):map(function(x)
 	return x * 2
 end)
 assert({arr, {2, 4, 6}})
+end)
 
 
--- chain
+test('chain', function(t)
 local arr = _({1, 0, 2, 4})
 	:chain()
 	:sort()
@@ -510,13 +543,15 @@ assert({_.chain():map(double):value(), {}})
 assert({_.chain(3333):map(double):value(), {}})
 
 assert(_.chain():split(''):value(), {})
+end)
+
+test('dump', function(t)
 
 local dumpedString1 = _.dump(123, true, nil, '321')
 assert(dumpedString1 == '123 true nil "321"')
 -- local dumpedString2 = _.dump({1, nil, true, '2'})
 local dumpedString2 = _.dump({1, 2, 3, 4})
 assert(dumpedString2 == '[1, 2, 3, 4]')
-
 --[[
 print(_.dump({
 	a = 1,
@@ -526,4 +561,7 @@ print(_.dump({
 	}
 }))
 ]]
+
+end)
+
 print('all tests ok!')
