@@ -1,100 +1,114 @@
 local _ = require 'shim'
+local test = require 'min-test'
 
--- isEqual
-local o = {a = 1}
-assert(_.isEqual(o, o))
-assert(_.isEqual(1, 1))
-assert(_.isEqual({}, {}))
-assert(not _.isEqual({a = 1}, {}))
-assert(not _.isEqual({}, {a = 1}))
-assert(_.isEqual({a = 1}, {a = 1}))
+test('isEqual', function(t)
+	local o = {a = 1}
+	t.ok(_.isEqual(o, o))
+	t.ok(_.isEqual(1, 1))
+	t.ok(_.isEqual({}, {}))
+	t.ok(not _.isEqual({a = 1}, {}))
+	t.ok(not _.isEqual({}, {a = 1}))
+	t.ok(_.isEqual({a = 1}, {a = 1}))
+end)
 
 
 -- after test _.isEqual, override lua assert
 local assert = _.ok
 
--- isArray
-assert(
-	  _.isArray({1, 2, 3})
-	, not _.isArray({1, 2, 3, w = 4})
-	, _.isArray({[1] = 2, [2] = 3})
-	, not _.isArray({[1] = 2, [2] = 3, [4] = 5})
-	, _.isArray({})
-	, _.isArray({
-		{1, 2},
-		{a = 2},
-		3,
-		{1, 2},
-		{a = {
-			a = 2
-		}}
-	})
-)
+test('isArray', function(t)
 
--- each
-local arr = {1, 0, 2, 4}
-local i = 0
-assert(_.each(arr, function(x)
-	i = i + 1
-	assert(x == arr[i])
-end) == arr)
+	local arr = {
+		  _.isArray({1, 2, 3})
+		, not _.isArray({1, 2, 3, w = 4})
+		, _.isArray({[1] = 2, [2] = 3})
+		, not _.isArray({[1] = 2, [2] = 3, [4] = 5})
+		, _.isArray({})
+		, _.isArray({
+			{1, 2},
+			{a = 2},
+			3,
+			{1, 2},
+			{a = {
+				a = 2
+			}}
+		})
+	}
+	
+	_.each(arr, function(val)
+		t.ok(val)
+	end)
 
-_.each({}, function()
-	assert(false, 'never access')
 end)
 
+test('each', function(t)
+	local arr = {1, 0, 2, 4}
+	local i = 0
+	t.ok(_.each(arr, function(x)
+		i = i + 1
+		t.ok(x == arr[i])
+	end) == arr)
 
--- _each
-local arr = {}
-_._each({1, 2, 3, 4}, function(x)
-	if x > 2 then return false end
-	table.insert(arr, x)
-end)
-assert(
-	{arr, {1, 2}}
-)
-
-local arr2 = {}
-_._each({1, 2, 3, 4}, function(x)
-	table.insert(arr2, x or 'error')
-end)
-assert({arr2, {1, 2, 3, 4}})
-
-_._each({}, function()
-	assert(false, 'never access')
+	_.each({}, function()
+		t.ok(false, 'never access')
+	end)
 end)
 
-
--- some
-local flag = _.some({1, 2, 3}, function(x)
-	return x > 2
+test('_each', function(t)
+	local arr = {}
+	_._each({1, 2, 3, 4}, function(x)
+		if x > 2 then return false end
+		table.insert(arr, x)
+	end)
+	t.ok(
+		{arr, {1, 2}}
+	)
 end)
-assert(flag)
 
-local flag = _.some({1, 2, 3}, function(x)
-	return x > 4
+test('_each 2', function(t)
+	local arr = {}
+	_._each({1, 2, 3, 4}, function(x)
+		table.insert(arr, x or 'error')
+	end)
+	t.ok({arr, {1, 2, 3, 4}})
+
+	_._each({}, function()
+		t.ok(false, 'never access')
+	end)
 end)
-assert(not flag)
 
--- every
-local flag = _.every({1, 2, 3}, function(x)
-	return x > 0
+test('some', function(t)
+	local flag = _.some({1, 2, 3}, function(x)
+		return x > 2
+	end)
+	t.ok(flag)
+
+	local flag = _.some({1, 2, 3}, function(x)
+		return x > 4
+	end)
+	t.ok(not flag)
 end)
-assert(flag)
 
-local flag = _.every({1, 2, 3}, function(x)
-	return x > 2
+test('every', function(t)
+	local flag = _.every({1, 2, 3}, function(x)
+		return x > 0
+	end)
+	t.ok(flag)
+
+	local flag = _.every({1, 2, 3}, function(x)
+		return x > 2
+	end)
+	t.ok(not flag)
 end)
-assert(not flag)
 
--- find
-assert(3 == _.find({1, 2, 3, 4, 5}, function(x)
-	return x >= 3
-end))
+test('find', function(t)
+	t.equal(_.find({1, 2, 3, 4, 5}, function(x)
+		return x >= 3
+	end), 3)
 
-assert(nil == _.find({1, 2, 3, 4, 5}, function(x)
-	return x >= 6
-end))
+	t.equal(_.find({1, 2, 3, 4, 5}, function(x)
+		return x >= 6
+	end), nil)
+end)
 
 -- map
 local arr = {1, 0, 2, 4}

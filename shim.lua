@@ -90,6 +90,30 @@ _.findIndex = findIndex
 
 -- Iteration
 
+function _.len(list)
+	if isString(list) or isTable(list) then
+		return #list
+	end
+	return 0
+end
+
+function _.slice(list, first, last)
+	local ret = {}
+	local len = _.len(list)
+	if len >= 0 then
+		first = first or 0 + 1
+		last = last or len + 1
+		if isString(list) then
+			ret = list:sub(first, last)
+		elseif isTable(list) then
+			for i = first, last - 1 do
+				push(ret, list[i])
+			end
+		end
+	end
+	return ret
+end
+
 function _.isArray(t)
 	if isTable(t) then
 		local i = 0
@@ -302,7 +326,6 @@ function _.reduce(arr, fn, prev)
 	return prev
 end
 
-
 function _.keys(obj)
 	local ret = {}
 	forIn(obj, function(val, key)
@@ -425,6 +448,14 @@ function _.trim(s, where)
 		end
 	end
 	return _.sub(s, i, j)
+end
+
+function _.startsWith(str, val)
+	return 0 + 1 == indexOf(str, val)
+end
+
+function _.endsWith(str, val)
+	return val == _.slice(str, _.len(str) - _.len(val))
 end
 
 -- string end
