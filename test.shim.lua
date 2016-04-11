@@ -59,9 +59,7 @@ test('_each', function(t)
 		if x > 2 then return false end
 		table.insert(arr, x)
 	end)
-	t.ok(
-		{arr, {1, 2}}
-	)
+	t.deepEqual(arr, {1, 2})
 end)
 
 test('_each 2', function(t)
@@ -69,7 +67,7 @@ test('_each 2', function(t)
 	_._each({1, 2, 3, 4}, function(x)
 		table.insert(arr, x or 'error')
 	end)
-	t.ok({arr, {1, 2, 3, 4}})
+	t.deepEqual(arr, {1, 2, 3, 4})
 
 	_._each({}, function()
 		t.ok(false, 'never access')
@@ -143,9 +141,9 @@ test('extend', function(t)
 		, {_.extend({a = 1}), {a = 1}}
 		, {_.extend({a = 1}, {b = 2}, {c = 3}), {a = 1, b = 2, c = 3}}
 	}
-	
-	_.each(arr, function(val)
-		t.ok(val)
+
+	_.each(arr, function(arr)
+		t.deepEqual(arr[1], arr[2])
 	end)
 end)
 
@@ -175,129 +173,127 @@ test('indexOf', function(t)
 end)
 
 test('lastIndexOf', function(t)
-assert(
-	  _.lastIndexOf({11, 22, 33, 11}, 11) == 4
-	, _.lastIndexOf({11, 22, 33, 11}, 0) == nil
-	, _.lastIndexOf({11, 22, 33}, 11) == 1
-)
-local i, j = _.lastIndexOf('qweqwe', 'we')
-assert(i == 5)
-assert(j == 6)
+	local arr = {
+		  _.lastIndexOf({11, 22, 33, 11}, 11) == 4
+		, _.lastIndexOf({11, 22, 33, 11}, 0) == nil
+		, _.lastIndexOf({11, 22, 33}, 11) == 1
+	}
+	_.each(arr, function(val)
+		t.ok(val)
+	end)
+
+	local i, j = _.lastIndexOf('qweqwe', 'we')
+	t.ok(i == 5)
+	t.ok(j == 6)
 end)
 
 test('trim', function(t)
-assert(
-	  _.trim('  qq  ') == 'qq'
-	, _.trim('   ') == ''
-	, _.trim('') == ''
-	, _.trim('  qq  ', 'right') == '  qq'
-	, _.trim('  qq  ', 'left') == 'qq  '
-	, _.trim(nil) == ''
-)
+	local arr = {
+		  _.trim('  qq  ') == 'qq'
+		, _.trim('   ') == ''
+		, _.trim('') == ''
+		, _.trim('  qq  ', 'right') == '  qq'
+		, _.trim('  qq  ', 'left') == 'qq  '
+		, _.trim(nil) == ''
+	}
+
+	_.each(arr, function(val)
+		t.ok(val)
+	end)
 end)
 
 test('flatten', function(t)
-assert(
-	{
-		_.flatten({1, {2}, {3, {{4}}}}),
-		{1, 2, 3, {{4}}}
-	}
-)
+	t.deepEqual(_.flatten({1, {2}, {3, {{4}}}}), {1, 2, 3, {{4}}})
 end)
 
 test('uniq', function(t)
-assert(
-	{
-		_.uniq({1, 2, 3, 2, 1}),
-		{1, 2, 3}
-	}
-)
+	t.deepEqual(_.uniq({1, 2, 3, 2, 1}), {1, 2, 3})
 
-local tbla = {a = 1}
-local tblb = {b = 1}
-assert(
-	{
-		_.uniq({tbla, tblb, 3, tbla, tblb, tbla}),
-		{tbla, tblb, 3}
-	}
-)
+	local tbla = {a = 1}
+	local tblb = {b = 1}
+	t.deepEqual(_.uniq({tbla, tblb, 3, tbla, tblb, tbla}), {tbla, tblb, 3})
 end)
 
 test('union', function(t)
-assert(
-	{
-		_.sort(_.union({1, 2, 3}, {5, 2, 1, 4}, {2, 1})),
-		{1, 2, 3, 4, 5}
-	}
-)
+	t.deepEqual(_.sort(_.union({1, 2, 3}, {5, 2, 1, 4}, {2, 1})), {1, 2, 3, 4, 5})
 end)
 
 test('split', function(t)
-assert(
-	{
-		_.split('q,w,e,r', ','),
-		{'q', 'w', 'e', 'r'}
+	local arr = {
+		{
+			_.split('q,w,e,r', ','),
+			{'q', 'w', 'e', 'r'}
+		}
+		, {
+			_.split('qwer as', ''),
+			{'q', 'w', 'e', 'r', ' ', 'a', 's'}
+		}
+		, {
+			_.split('qwer', 'zz'),
+			{'qwer'}
+		}, {
+			_.split('qq@ww@ee', '@'),
+			{'qq', 'ww', 'ee'}
+		}, {
+			_.split(nil, ''),
+			{}
+		}, {
+			_.split(0, '-'),
+			{'0'}
+		}, {
+			_.split('127.0.0.1', '.', true),
+			{'127', '0', '0', '1'}
+		}
 	}
-	, {
-		_.split('qwer as', ''),
-		{'q', 'w', 'e', 'r', ' ', 'a', 's'}
-	}
-	, {
-		_.split('qwer', 'zz'),
-		{'qwer'}
-	}, {
-		_.split('qq@ww@ee', '@'),
-		{'qq', 'ww', 'ee'}
-	}, {
-		_.split(nil, ''),
-		{}
-	}, {
-		_.split(0, '-'),
-		{'0'}
-	}, {
-		_.split('127.0.0.1', '.', true),
-		{'127', '0', '0', '1'}
-	}
-)
+
+	_.each(arr, function(arr)
+		t.deepEqual(arr[1], arr[2])
+	end)
 end)
 
 test('join', function(t)
-assert({
-	_.join({1, 2, 3}, '-'),
-	'1-2-3'
-})
-assert({
-		_.join(nil, '-'),
-		''
-	}, {
-	   _.join(2222, '-'),
-	   ''
-	}, {
-		_.join({11, nil, '33'}, '-'),
-		'11--33'
-	}, {
-		_.includes(_.join({11, {a = 1}, 22}, '-'), 'table'),
-		true
-	}, {
-		_.join({11, 22}, nil),
-		'1122'
-	}
-)
+	assert({
+		_.join({1, 2, 3}, '-'),
+		'1-2-3'
+	})
+	assert({
+			_.join(nil, '-'),
+			''
+		}, {
+		   _.join(2222, '-'),
+		   ''
+		}, {
+			_.join({11, nil, '33'}, '-'),
+			'11--33'
+		}, {
+			_.includes(_.join({11, {a = 1}, 22}, '-'), 'table'),
+			true
+		}, {
+			_.join({11, 22}, nil),
+			'1122'
+		}
+	)
 end)
 
 test('empty', function(t)
-assert(_.empty(false))
-assert(_.empty(true))
-assert(_.empty({}))
-assert(_.empty(0))
-assert(_.empty(1))
-assert(_.empty(''))
-assert(_.empty(print))
-assert(not _.empty('0'))
-assert(not _.empty('11111'))
-assert(not _.empty({0}))
-assert(not _.empty({1, 2}))
-assert(not _.empty({a = 1}))
+	local arr = {
+		  _.empty(false)
+		, _.empty(true)
+		, _.empty({})
+		, _.empty(0)
+		, _.empty(1)
+		, _.empty('')
+		, _.empty(print)
+		, not _.empty('0')
+		, not _.empty('11111')
+		, not _.empty({0})
+		, not _.empty({1, 2})
+		, not _.empty({a = 1})
+	}
+	_.each(arr, function(val)
+		t.ok(val)
+	end)
+
 end)
 
 test('difference', function(t)
