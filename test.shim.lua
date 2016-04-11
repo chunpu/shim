@@ -110,26 +110,29 @@ test('find', function(t)
 	end), nil)
 end)
 
--- map
-local arr = {1, 0, 2, 4}
-assert(
-	{_.map(arr, function(x)
+test('map', function(t)
+	local arr = {1, 0, 2, 4}
+	t.deepEqual(_.map(arr, function(x)
 		return x + 1
-	end), {2, 1, 3, 5}}
-)
+	end), {2, 1, 3, 5})
+end)
 
--- includes
-assert(
-	  _.includes('qwert', 'rt')
-	, not _.includes('qwert', 'tr')
-	, not _.includes('qwert', nil)
-	, not _.includes('qwert', 1024)
-	, not _.includes('qwert')
+test('includes', function(t)
+	local arr = {
+		  _.includes('qwert', 'rt')
+		, not _.includes('qwert', 'tr')
+		, not _.includes('qwert', nil)
+		, not _.includes('qwert', 1024)
+		, not _.includes('qwert')
 
-	, _.includes({1, 2, 3, 4}, 3)
-	, not _.includes({1, 2, 3, 4}, 5)
-	, not _.includes({a = 1, b = 2}, 3)
-)
+		, _.includes({1, 2, 3, 4}, 3)
+		, not _.includes({1, 2, 3, 4}, 5)
+		, not _.includes({a = 1, b = 2}, 3)
+	}
+	_.each(arr, function(val)
+		t.ok(val)
+	end)
+end)
 
 -- extend
 assert(

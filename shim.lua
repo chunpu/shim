@@ -184,6 +184,8 @@ function _.isEqual(a, b)
 	end
 end
 
+_.isDeepEqual = _.isEqual
+
 function _.includes(val, sub)
 	return nil ~= _.indexOf(val, sub)
 end
