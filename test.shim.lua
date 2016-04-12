@@ -1,6 +1,12 @@
 local _ = require 'shim'
 local test = require 'min-test'
 
+local function assertList(arr, t)
+	_.each(arr, function(arr)
+		t.deepEqual(arr[1], arr[2])
+	end)
+end
+
 test('isEqual', function(t)
 	local o = {a = 1}
 	t.ok(_.isEqual(o, o))
@@ -297,267 +303,281 @@ test('empty', function(t)
 end)
 
 test('difference', function(t)
-assert(
-	{
-		_.difference({1, 2, 3, 4, 5}, {5, 2, 10}),
-		{1, 3, 4}
-	}
-)
+	t.deepEqual(_.difference({1, 2, 3, 4, 5}, {5, 2, 10}), {1, 3, 4})
 end)
 
 test('without', function(t)
-assert(
-	{
-		_.without({1, 4, 3, nil, 0, ''}, nil, 0, ''),
-		{1, 4, 3}
-	}
-)
+	t.deepEqual(_.without({1, 4, 3, nil, 0, ''}, nil, 0, ''), {1, 4, 3})
 end)
 
 test('push', function(t)
-assert(
-	{
-		_.push({1, 2, 3}, 4, 5),
-		{1, 2, 3, 4, 5}
-	},
-	{
-		_.push(nil, 4, 5),
-		nil
+	local arr = {
+		{
+			_.push({1, 2, 3}, 4, 5),
+			{1, 2, 3, 4, 5}
+		},
+		{
+			_.push(nil, 4, 5),
+			nil
+		}
 	}
-)
+	_.each(arr, function(arr)
+		t.deepEqual(arr[1], arr[2])
+	end)
 end)
 
 test('sub', function(t)
-assert(
-	{
-		_.sub('qwer', 2, 3),
-		'we'
-	},
-	{
-		_.sub(nil, 2, 3),
-		''
+	local arr = {
+		{
+			_.sub('qwer', 2, 3),
+			'we'
+		},
+		{
+			_.sub(nil, 2, 3),
+			''
+		}
 	}
-)
+	_.each(arr, function(arr)
+		t.deepEqual(arr[1], arr[2])
+	end)
 end)
 
 test('reduce', function(t)
-assert(
-	{
-		_.reduce({}, function() end),
-		nil
-	},
-	{
-		_.reduce({}, function() end, 2),
-		2
-	},
-	{
-		_.reduce({1, 2, 3, 4}, function(ret, k)
-			return ret + k
-		end, 0),
-		10
+	local arr = {
+		{
+			_.reduce({}, function() end),
+			nil
+		},
+		{
+			_.reduce({}, function() end, 2),
+			2
+		},
+		{
+			_.reduce({1, 2, 3, 4}, function(ret, k)
+				return ret + k
+			end, 0),
+			10
+		}
 	}
-)
+
+	_.each(arr, function(arr)
+		t.deepEqual(arr[1], arr[2])
+	end)
 end)
 
 test('only', function(t)
-assert(
-	{
-		_.only({
-			a = 1,
-			b = 2,
-			c = 3
-		}, {'a', 'b'}),
-		{a = 1, b = 2}
-	},
-	{
-		_.only({
-			a = 1,
-			b = 2,
-			c = 3,
-			d = 4
-		}, 'a c  d'),
+	local arr = {
 		{
-			a = 1,
-			c = 3,
-			d = 4
+			_.only({
+				a = 1,
+				b = 2,
+				c = 3
+			}, {'a', 'b'}),
+			{a = 1, b = 2}
+		},
+		{
+			_.only({
+				a = 1,
+				b = 2,
+				c = 3,
+				d = 4
+			}, 'a c  d'),
+			{
+				a = 1,
+				c = 3,
+				d = 4
+			}
 		}
 	}
-)
+
+	_.each(arr, function(arr)
+		t.deepEqual(arr[1], arr[2])
+	end)
 end)
 
 test('keys', function(t)
-assert(
-	{
-		_.sort(_.keys({
-			a = 1,
-			b = 2,
-			c = 3
-		})),
-		_.sort({'a', 'b', 'c'})
+	local arr = {
+		{
+			_.sort(_.keys({
+				a = 1,
+				b = 2,
+				c = 3
+			})),
+			_.sort({'a', 'b', 'c'})
+		}
 	}
-)
+
+	_.each(arr, function(arr)
+		t.deepEqual(arr[1], arr[2])
+	end)
 end)
 
 test('values', function(t)
-assert(
-	{
-		_.sort(_.values({
-			a = 1,
-			b = 2,
-			c = 3
-		})),
-		_.sort({1, 2, 3})
+	local arr = {
+		{
+			_.sort(_.values({
+				a = 1,
+				b = 2,
+				c = 3
+			})),
+			_.sort({1, 2, 3})
+		}
 	}
-)
+
+	_.each(arr, function(arr)
+		t.deepEqual(arr[1], arr[2])
+	end)
 end)
 
 test('forIn', function(t)
-local forInObj = {a = 1, b = 2}
-local forInArr = {}
-_.forIn(forInObj, function(val, key, obj)
-	assert(forInObj == obj)
-	assert(val == obj[key])
-	_.push(forInArr, val)
-end)
-assert({
-	_.sort(forInArr),
-	_.sort({1, 2})
-})
+	local forInObj = {a = 1, b = 2}
+	local forInArr = {}
 
-_.forIn(nil, function()
-	assert(false)
-end)
+	_.forIn(forInObj, function(val, key, obj)
+		t.ok(forInObj == obj)
+		t.ok(val == obj[key])
+		_.push(forInArr, val)
+	end)
 
-_.forIn(2, function()
-	assert(false)
-end)
+	t.deepEqual(_.sort(forInArr), _.sort({1, 2}))
+
+	_.forIn(nil, function()
+		t.ok(false)
+	end)
+
+	_.forIn(2, function()
+		t.ok(false)
+	end)
 end)
 
 test('mapKeys', function(t)
-assert(
-	{
-		_.mapKeys({a = 1, b = 2}, function(val, key)
-			return key .. val
-		end),
-		{a1 = 1, b2 = 2}
+	local arr = {
+		{
+			_.mapKeys({a = 1, b = 2}, function(val, key)
+				return key .. val
+			end),
+			{a1 = 1, b2 = 2}
+		}
 	}
-)
+	assertList(arr, t)
 end)
 
 test('mapValues', function(t)
-assert(
-	{
-		_.mapValues({a = 1, b = 2}, function(val, key)
-			return val * 3
-		end),
-		{a = 3, b = 6}
+	local arr = {
+		{
+			_.mapValues({a = 1, b = 2}, function(val, key)
+				return val * 3
+			end),
+			{a = 3, b = 6}
+		}
 	}
-)
+	assertList(arr, t)
 end)
 
 test('get', function(t)
-assert(
-	{
-		_.get({a = {{b = {c = 3}}}}, {'a', 1, 'b', 'c'}),
-		3
-	},
-	{
-		_.get({a = 1}, {}),
-		nil
-	},
-	{
-		_.get({a = 1}, {'b', 'c'}),
-		nil
-	},
-	{
-		_.get(3, {1, 2}),
-		nil
-	},
-	{
-		_.get({a = 1}, {'a', 'b'}),
-		nil
+	local arr = {
+		{
+			_.get({a = {{b = {c = 3}}}}, {'a', 1, 'b', 'c'}),
+			3
+		},
+		{
+			_.get({a = 1}, {}),
+			nil
+		},
+		{
+			_.get({a = 1}, {'b', 'c'}),
+			nil
+		},
+		{
+			_.get(3, {1, 2}),
+			nil
+		},
+		{
+			_.get({a = 1}, {'a', 'b'}),
+			nil
+		}
 	}
-)
+	assertList(arr, t)
 end)
 
 test('invoke', function(t)
-assert(
-	{
-		_.invoke({'1', '2', '3'}, tonumber),
-		{1, 2, 3}
-	},
-	{
-		_.invoke({1, 2, 3}),
-		{nil, nil, nil}
-	},
-	{
-		_.invoke({{3, 2, 1}, {4, 6, 5}}, _.sort),
-		{{1, 2, 3}, {4, 5, 6}}
+	local arr = {
+		{
+			_.invoke({'1', '2', '3'}, tonumber),
+			{1, 2, 3}
+		},
+		{
+			_.invoke({1, 2, 3}),
+			{nil, nil, nil}
+		},
+		{
+			_.invoke({{3, 2, 1}, {4, 6, 5}}, _.sort),
+			{{1, 2, 3}, {4, 5, 6}}
+		}
 	}
-)
+	assertList(arr, t)
 end)
 
 test('wrapper', function(t)
-local arr = _({1, 2, 3}):map(function(x)
-	return x * 2
-end)
-assert({arr, {2, 4, 6}})
+	local arr = _({1, 2, 3}):map(function(x)
+		return x * 2
+	end)
+	t.deepEqual(arr, {2, 4, 6})
 end)
 
 
 test('chain', function(t)
-local arr = _({1, 0, 2, 4})
-	:chain()
-	:sort()
-	:map(function(x) return x * 2 end)
-	:filter(function(x) return x < 6 end)
-	:value()
-assert({arr, {0, 2, 4}})
+	local arr = _({1, 0, 2, 4})
+		:chain()
+		:sort()
+		:map(function(x) return x * 2 end)
+		:filter(function(x) return x < 6 end)
+		:value()
+	t.deepEqual(arr, {0, 2, 4})
 
--- chain direct
-local function double(val)
-	return val * 2
-end
-local chain1 = _.chain({1, 2, 3}):map(double):value()
-local chain2 = _.chain({2, 3, 4}):map(double):value()
-assert({chain1, {2, 4, 6}})
-assert({chain2, {4, 6, 8}})
+	-- chain direct
+	local function double(val)
+		return val * 2
+	end
+	local chain1 = _.chain({1, 2, 3}):map(double):value()
+	local chain2 = _.chain({2, 3, 4}):map(double):value()
+	t.deepEqual(chain1, {2, 4, 6})
+	t.deepEqual(chain2, {4, 6, 8})
 
--- not mixed
-local chain3 = _({1, 1, 2}):chain()
-local chain4 = _({2, 2, 1}):chain()
-assert({chain3:map(double):value(), {2, 2, 4}})
-assert({chain4:map(double):value(), {4, 4, 2}})
+	-- not mixed
+	local chain3 = _({1, 1, 2}):chain()
+	local chain4 = _({2, 2, 1}):chain()
+	t.deepEqual(chain3:map(double):value(), {2, 2, 4})
+	t.deepEqual(chain4:map(double):value(), {4, 4, 2})
 
-local chain5 = _({1, 1, 2}):chain():map(double)
-local chain6 = _({2, 2, 1}):chain():map(double)
-assert({chain5:value(), {2, 2, 4}})
-assert({chain6:value(), {4, 4, 2}})
+	local chain5 = _({1, 1, 2}):chain():map(double)
+	local chain6 = _({2, 2, 1}):chain():map(double)
+	t.deepEqual(chain5:value(), {2, 2, 4})
+	t.deepEqual(chain6:value(), {4, 4, 2})
 
--- string chain never crash
-assert({_.chain():map(double):value(), {}})
-assert({_.chain(3333):map(double):value(), {}})
+	-- string chain never crash
+	t.deepEqual(_.chain():map(double):value(), {})
+	t.deepEqual(_.chain(3333):map(double):value(), {})
 
-assert(_.chain():split(''):value(), {})
+	t.deepEqual(_.chain():split(''):value(), {})
 end)
 
 test('dump', function(t)
+	local dumpedString1 = _.dump(123, true, nil, '321')
+	t.equal(dumpedString1, '123 true nil "321"')
+	-- local dumpedString2 = _.dump({1, nil, true, '2'})
+	local dumpedString2 = _.dump({1, 2, 3, 4})
+	t.equal(dumpedString2, '[1, 2, 3, 4]')
 
-local dumpedString1 = _.dump(123, true, nil, '321')
-assert(dumpedString1 == '123 true nil "321"')
--- local dumpedString2 = _.dump({1, nil, true, '2'})
-local dumpedString2 = _.dump({1, 2, 3, 4})
-assert(dumpedString2 == '[1, 2, 3, 4]')
---[[
-print(_.dump({
-	a = 1,
-	b = {
+	--[[
+	print(_.dump({
 		a = 1,
-		b = {2, 3, 4}
-	}
-}))
-]]
-
+		b = {
+			a = 1,
+			b = {2, 3, 4}
+		}
+	}))
+	]]
 end)
 
 print('all tests ok!')
