@@ -17,12 +17,40 @@ test('isEqual', function(t)
 	t.ok(_.isEqual({a = 1}, {a = 1}))
 end)
 
+test('slice', function(t)
+	local str = 'abcde'
+	t.equal(_.slice(str), str)
+	t.equal(_.slice(str, 1, _.len(str) + 1), str)
+	t.equal(_.slice(str, 2), 'bcde')
+	t.equal(_.slice(str, 2, 3), 'b')
+	t.equal(_.slice(str, 2, 4), 'bc')
+	t.equal(_.slice(str, 2, 2), '')
 
--- after test _.isEqual, override lua assert
-local assert = _.ok
+	local arr = {2, 3, 4, 5}
+	t.deepEqual(_.slice(arr), {2, 3, 4, 5})
+	t.deepEqual(_.slice(arr, 1, 5), {2, 3, 4, 5})
+	t.deepEqual(_.slice(arr, 2), {3, 4, 5})
+	t.deepEqual(_.slice(arr, 2, 3), {3})
+	t.deepEqual(_.slice(arr, 2, 2), {})
+end)
+
+test('startsWith', function(t)
+	t.ok(_.startsWith('abcd', 'a'))
+	t.ok(_.startsWith('abcd', 'abcd'))
+	t.ok(not _.startsWith('abcd', nil))
+	t.ok(not _.startsWith('abcd', 'dc'))
+	t.ok(not _.startsWith('abcd', 'c'))
+end)
+
+test('endsWith', function(t)
+	t.ok(_.endsWith('abcd', 'd'))
+	t.ok(_.endsWith('abcd', 'abcd'))
+	t.ok(not _.endsWith('abcd', nil))
+	t.ok(not _.endsWith('abcd', 'dc'))
+	t.ok(not _.endsWith('abcd', 'c'))
+end)
 
 test('isArray', function(t)
-
 	local arr = {
 		  _.isArray({1, 2, 3})
 		, not _.isArray({1, 2, 3, w = 4})
@@ -43,7 +71,6 @@ test('isArray', function(t)
 	_.each(arr, function(val)
 		t.ok(val)
 	end)
-
 end)
 
 test('each', function(t)

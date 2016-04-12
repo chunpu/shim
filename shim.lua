@@ -98,13 +98,14 @@ function _.len(list)
 end
 
 function _.slice(list, first, last)
+	-- return [first, last)
 	local ret = {}
 	local len = _.len(list)
 	if len >= 0 then
 		first = first or 0 + 1
 		last = last or len + 1
 		if isString(list) then
-			ret = list:sub(first, last)
+			ret = list:sub(first, last - 1)
 		elseif isTable(list) then
 			for i = first, last - 1 do
 				push(ret, list[i])
@@ -453,11 +454,11 @@ function _.trim(s, where)
 end
 
 function _.startsWith(str, val)
-	return 0 + 1 == indexOf(str, val)
+	return 0 + 1 == _.indexOf(str, val)
 end
 
 function _.endsWith(str, val)
-	return val == _.slice(str, _.len(str) - _.len(val))
+	return val == _.slice(str, _.len(str) - _.len(val) + 1)
 end
 
 -- string end
