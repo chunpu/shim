@@ -609,4 +609,10 @@ test('dump', function(t)
 	]]
 end)
 
+test('now', function(t)
+	local now = _.now()
+	t.ok(now > 1462269341287 / 2)
+	t.ok(now < 1462269341287 * 2)
+end)
+
 print('all tests ok!')

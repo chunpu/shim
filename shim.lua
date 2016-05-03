@@ -35,6 +35,16 @@ _.isFunction = isFunction
 _.isBoolean = isBoolean
 _.isNil = isNil
 
+local function hasNgx()
+	-- https://github.com/openresty/lua-nginx-module
+	if not isNil(ngx) then
+		return true
+	end
+	return false
+end
+
+_.hasNgx = hasNgx()
+
 
 -- list start
 
@@ -464,6 +474,16 @@ end
 -- string end
 
 -- other start
+
+function _.now()
+	local now
+	if _.hasNgx then
+		now = ngx.now()
+	else
+		now = os.time()
+	end
+	return now * 1000 -- return ms
+end
 
 function _.chain(val)
 	return _(val):chain()
