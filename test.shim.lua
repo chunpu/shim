@@ -40,6 +40,7 @@ test('startsWith', function(t)
 	t.ok(not _.startsWith('abcd', nil))
 	t.ok(not _.startsWith('abcd', 'dc'))
 	t.ok(not _.startsWith('abcd', 'c'))
+	t.ok(_.startsWith('http%3Axxxx', 'http%3A'))
 end)
 
 test('endsWith', function(t)

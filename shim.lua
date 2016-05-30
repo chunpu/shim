@@ -373,11 +373,14 @@ function _.mapValues(obj, fn)
 end
 
 local function toPath(arr)
+	local path = {}
 	if isTable(arr) then
-		return arr
+		path = arr
+	elseif isString(arr) then
+		-- 不支持括号 path
+		path = _.split(arr, '.', true)
 	end
-	-- TODO support string
-	return {}
+	return path
 end
 
 function _.get(obj, path)
@@ -391,6 +394,14 @@ function _.get(obj, path)
 		end)
 		if flag then return obj end
 	end
+end
+
+function _.has(obj, path)
+	-- TODO
+end
+
+function _.set(obj, path)
+	-- TODO
 end
 
 function _.only(obj, keys)
@@ -464,7 +475,8 @@ function _.trim(s, where)
 end
 
 function _.startsWith(str, val)
-	return 0 + 1 == _.indexOf(str, val)
+	-- never support pattern
+	return 0 + 1 == _.indexOf(str, val, 1, true)
 end
 
 function _.endsWith(str, val)
