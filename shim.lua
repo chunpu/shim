@@ -485,6 +485,23 @@ end
 
 -- string end
 
+-- function start
+
+function _.before(n, fn)
+	return function(...)
+		if n > 1 then
+			n = n - 1
+			return fn(...)
+		end
+	end
+end
+
+function _.once(fn)
+	return _.before(2, fn)
+end
+
+-- function end
+
 -- other start
 
 function _.now()

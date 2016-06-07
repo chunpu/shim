@@ -548,6 +548,28 @@ test('invoke', function(t)
 	assertList(arr, t)
 end)
 
+test('before', function(t)
+	local sum = 0
+	local fn = _.before(4, function()
+		sum = sum + 1
+	end)
+	for i = 1, 100 do
+		fn()
+	end
+	t.deepEqual(sum, 3)
+end)
+
+test('once', function(t)
+	local sum = 0
+	local fn = _.once(function()
+		sum = sum + 1
+	end)
+	for i = 1, 100 do
+		fn()
+	end
+	t.deepEqual(sum, 1)
+end)
+
 test('wrapper', function(t)
 	local arr = _({1, 2, 3}):map(function(x)
 		return x * 2
