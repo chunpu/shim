@@ -238,6 +238,14 @@ function _.uniq(arr)
 	return ret
 end
 
+function _.compact(arr)
+	return _.filter(arr, _.identity)
+end
+
+function _.identity(val)
+	return val
+end
+
 function _.union(...)
 	return _.uniq(_.flatten({...}))
 end
@@ -402,6 +410,14 @@ end
 
 function _.set(obj, path)
 	-- TODO
+end
+
+function _.invert(obj)
+	local ret = {}
+	forIn(obj, function(val, key)
+		ret[val] = key
+	end)
+	return ret
 end
 
 function _.only(obj, keys)
