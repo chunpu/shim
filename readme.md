@@ -9,12 +9,22 @@ A clean utility library, support for basic and useful function, make it easy to 
 
 `Shim.lua` was deeply inspired by [Underscore.js](https://github.com/jashkenas/underscore), [Lodash.js](https://github.com/lodash/lodash), [Moses](https://github.com/Yonaba/Moses)
 
+
 Install
 ---
+
+Use [opm](http://opm.openresty.org/)
+
+```bash
+opm get chunpu/shim
+```
+
+Download directly
 
 ```bash
 wget --no-check-certificate https://raw.githubusercontent.com/chunpu/Shim/master/shim.lua
 ```
+
 
 Usage
 ---

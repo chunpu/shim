@@ -1,4 +1,6 @@
-local _ = {}
+local _ = {
+	version = "1.0.2"
+}
 
 local push = table.insert
 
